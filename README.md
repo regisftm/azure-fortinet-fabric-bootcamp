@@ -34,8 +34,8 @@ The estimated time to complete this bootcamp is 90-120 minutes.
 
 This bootcamp is organized in sequential modules. One module will build up on top of the previous module, so please, follow the order as proposed below.
 
-Module 1 - [Getting Started](/modules/module-1-getting-started.md)
-Module 2 - 
+Module 1 - [Getting Started](/modules/module-1-getting-started.md)  
+Module 2 -   
 
 ---
 
