@@ -39,5 +39,11 @@ Module 2 -
 
 ---
 
-> [!Note]
+> [!NOTE]
 > The workshop provides examples and sample code as instructional content for you to consume. These examples will help you understand how to configure Calico Cloud and build a functional solution. Please note that these examples are not suitable for use in production environments.
+
+> [!WARNING] 
+> If you are using a subscription in your production environment, it would be more prudent not to use your "Global Admin" account. Although the lab is designed to function in "isolated" mode, a "human" error when creating certain resources ("peering", routing table, ...) could impact your production environment. We recommend using your standard account on an isolated subscription.
+
+> [!CAUTION] 
+> This lab uses several virtual machines. The entire lab should stay under $30. At the end of the day, it will be important to delete everything or at least stop the VMs if you don't want any unpleasant surprises.
