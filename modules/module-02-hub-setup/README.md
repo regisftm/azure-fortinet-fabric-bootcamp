@@ -104,8 +104,10 @@ By the end of this module, you will have:
    - **Virtual machine name**: `vm-hub-jumpbox`
    - **Region**: `Canada Central`
    - **Availability options**: `No infrastructure redundancy required`
-   - **Image**: `Windows 11 Pro - x64 Gen2`
-   - **Size**: `Standard_D2s_v3 (2 vcpus, 8 GiB memory)`
+   - **Image**: `Windows 11 Pro, version 24H2 - x64 Gen2`
+   - **Size**: `Standard_B2s - 2 vcpus, 4 GiB memory`
+
+![create-vm.screenshot](images/4.2-create-vm.png)
 
 ### 4.3 Configure Authentication
 1. **Authentication type**: `Password`
@@ -114,9 +116,11 @@ By the end of this module, you will have:
 4. **Confirm password**: Re-enter your password
 5. **Public inbound ports**: `None` ⚠️ **IMPORTANT**
 
+![create-vm.screenshot](images/4.3-create-vm.png)
+
 ### 4.4 Configure VM Disks
 1. Click **"Next: Disks >"**
-2. Keep default disk configurations (Premium SSD, 30 GiB)
+2. Keep default disk configurations (Premium SSD, Image default (127 GiB))
 3. Click **"Next: Networking >"**
 
 ### 4.5 Configure VM Networking
@@ -126,6 +130,8 @@ By the end of this module, you will have:
    - **Public IP**: `None` ⚠️ **IMPORTANT**
    - **NIC network security group**: `Basic`
    - Keep other default settings
+
+![create-vm.screenshot](images/4.5-create-vm.png)
 
 2. Click **"Review + create"**
 3. Click **"Create"**
@@ -149,6 +155,8 @@ By the end of this module, you will have:
    - **Password**: Enter the password you created
 2. Click **"Connect"**
 
+![connect-bastion.animation](images/5.2-connect-bastion.gif)
+
 > [!TIP]
 > If a popup blocker prevents the Bastion window from opening, allow popups for the Azure Portal domain.
 
@@ -158,8 +166,9 @@ By the end of this module, you will have:
 3. Test basic connectivity by opening Command Prompt and running:
    ```cmd
    ipconfig
-   ping 8.8.8.8
    ```
+
+![connectivity-test.animation](images/5.3-connectivity-jumpbox.gif)
 
 ---
 
@@ -196,12 +205,14 @@ Before proceeding to Module 3, verify you have completed:
 
 After completing this module, your hub infrastructure should look like this:
 
+```text
 rg-hub-bootcamp
 ├── vnet-hub (10.16.0.0/16)
 │   ├── protected subnet (10.16.6.0/24)
 │   │   └── vm-hub-jumpbox (Windows 11, Private IP only)
 │   └── AzureBastionSubnet (10.16.1.0/24)
 │       └── bas-hub (with pip-bas-hub)
+```
 
 ---
 
