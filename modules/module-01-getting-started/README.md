@@ -155,7 +155,7 @@ Before proceeding to Module 2, verify you have completed:
 
 ## Next Steps
 
-Once you've completed this module and verified all prerequisites, you're ready to proceed to [**Module 2: Hub Network Infrastructure Setup**](/module/module-02-hub-setup/README.md).
+Once you've completed this module and verified all prerequisites, you're ready to proceed to [**Module 2: Hub Network Infrastructure Setup**](/modules/module-02-hub-setup/README.md).
 
 **Estimated completion time**: 15-20 minutes
 
