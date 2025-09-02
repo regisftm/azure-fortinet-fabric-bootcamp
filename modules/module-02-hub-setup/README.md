@@ -26,13 +26,17 @@ By the end of this module, you will have:
 2. Click on **"Virtual Network"** (Microsoft service)
 3. Click **"Create"**
 
+![create-vnet.animation](images/1.2-create-vnet-1.gif)
+
 ### 1.3 Configure Basic Settings
 1. **Basics** tab configuration:
    - **Subscription**: Your subscription
    - **Resource group**: `rg-hub-bootcamp`
    - **Name**: `vnet-hub`
    - **Region**: `Canada Central`
-2. Click **"Next: Security >"**
+2. Click **"Next: Security"**
+
+![create-vnet.screenshot](images/1.3-create-vnet.png)
 
 > [!NOTE]
 > **Naming Convention**: We're following Azure Cloud Adoption Framework naming standards. `vnet` = Virtual Network, `rg` = Resource Group, `bas` = Bastion, `pip` = Public IP, `vm` = Virtual Machine.
@@ -50,6 +54,8 @@ By the end of this module, you will have:
    - Click **"OK"**
 3. Click **"Next: IP Addresses >"**
 
+![azure-bastion.animation](images/2.1.azure-bastion.gif)
+
 ---
 
 ## Step 3: Configure IP Address Ranges
@@ -65,9 +71,13 @@ By the end of this module, you will have:
    - **Subnet address range**: `10.16.6.0/24`
    - Click **"Save"**
 
+![protected-subnet.animation](images/3.2-protected-subnet.png)
+
 2. **Bastion subnet** (should be automatically created):
    - **Name**: `AzureBastionSubnet` (fixed name, cannot be changed)
    - **Address range**: `10.16.1.0/24`
+
+![subnets.screenshot](images/3.2-2-subnets.png)
 
 ### 3.3 Review and Create
 1. Click **"Review + create"**
@@ -86,6 +96,8 @@ By the end of this module, you will have:
 2. Click **"+ Create"**
 3. Search for: **`virtual machine`**
 4. Select **"Virtual machine"** and click **"Create"**
+
+![vm-creation.animation](images/4.1-vm-creation.gif)
 
 ### 4.2 Configure VM Basics
 1. **Basics** tab configuration:
