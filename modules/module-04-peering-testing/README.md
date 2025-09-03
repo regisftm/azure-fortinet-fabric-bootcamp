@@ -26,18 +26,18 @@ By the end of this module, you will have:
 ### 1.2 Configure Spoke1 Peering
 1. Click **"+ Add"**
 2. **Remote virtual network summary** (top section):
-   - **This virtual network - Peering link name**: `hub-to-spoke1`
-   - **Traffic to remote virtual network**: `Allow (default)`
-   - **Traffic forwarded from remote virtual network**: `Allow (default)`
-   - **Virtual network gateway or Route Server**: `None (default)`
-
-3. **Remote virtual network summary** (bottom section):
+   - **Peering link name**: `spoke1-to-hub`
    - **Subscription**: Your subscription
    - **Virtual network**: `vnet-spoke1`
-   - **Remote virtual network - Peering link name**: `spoke1-to-hub`
-   - **Traffic to remote virtual network**: `Allow (default)`
-   - **Traffic forwarded from remote virtual network**: `Block traffic that originates from outside this virtual network`
+   - **Allow 'vnet-spoke1' to access 'vnet-hub'**: `Allow (default)`
+   - **Allow 'vnet-spoke1' to receive forwarded traffic from 'vnet-hub'**: `Allow (default)`
    - **Virtual network gateway or Route Server**: `None (default)`
+
+3. **Local virtual network summary** (bottom section):
+   - **Remote virtual network - Peering link name**: `hub-to-spoke1`
+   - **Allow 'vnet-hub' to access 'vnet-spoke1'**: `Allow (default)`
+
+
 
 4. Click **"Add"**
 
