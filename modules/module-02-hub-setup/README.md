@@ -167,10 +167,10 @@ By the end of this module, you will have:
 3. Test basic connectivity by opening Command Prompt and running:
    ```cmd
    ipconfig
-   ping 8.8.8.8
+   curl -I google.com
    ```
 
-![connectivity-test.animation](images/5.3-connectivity-jumpbox.gif)
+![connectivity-test.animation](images/5.3-connectivity-jumpbox.png)
 
 ---
 
@@ -213,8 +213,12 @@ rg-hub-bootcamp
 │   ├── protected subnet (10.16.6.0/24)
 │   │   └── vm-hub-jumpbox (Windows 11, Private IP only)
 │   └── AzureBastionSubnet (10.16.1.0/24)
-│       └── bas-hub (with pip-bas-hub)
+│       └── bas-hub
+rg-spoke1-bootcamp
+rg-spoke2-bootcamp
 ```
+
+![architecture-review.image](images/arch-review-mod2.png)
 
 ---
 

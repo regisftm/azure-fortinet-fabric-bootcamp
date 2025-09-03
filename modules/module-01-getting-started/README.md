@@ -153,6 +153,20 @@ Before proceeding to Module 2, verify you have completed:
 
 ---
 
+## Architecture Review
+
+After completing this module, your hub infrastructure should look like this:
+
+```text
+rg-hub-bootcamp
+rg-spoke1-bootcamp
+rg-spoke2-bootcamp
+```
+
+![architecture-review.image](images/arch-review-mod1.png)
+
+---
+
 ## Next Steps
 
 Once you've completed this module and verified all prerequisites, you're ready to proceed to [**Module 2: Hub Network Infrastructure Setup**](/modules/module-02-hub-setup/README.md).

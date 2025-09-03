@@ -35,7 +35,9 @@ The estimated time to complete this bootcamp is 90-120 minutes.
 This bootcamp is organized in sequential modules. One module will build up on top of the previous module, so please, follow the order as proposed below.
 
 Module 1 - [Getting Started: Azure Environment Setup and Verification](/modules/module-01-getting-started/README.md)    
-Module 2 -   
+Module 2 - [Hub Network Infrastructure: Creating the Hub Virtual Network with Azure Bastion](/modules/module-02-hub-setup/README.md)  
+
+
 
 ---
 
