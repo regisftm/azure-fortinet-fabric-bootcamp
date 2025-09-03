@@ -198,7 +198,7 @@ After completing this module, your infrastructure should look like this:
 
 ## Next Steps
 
-Once you've completed this module and verified all resources are created, you're ready to proceed to **Module 4: VNet Peering and Connectivity Testing**.
+Once you've completed this module and verified all resources are created, you're ready to proceed to [**Module 4: VNet Peering and Connectivity Testing**](/modules/module-04-peering-testing/README.md).
 
 In Module 4, we'll connect these isolated networks together and test connectivity between the spokes through the hub.
 
