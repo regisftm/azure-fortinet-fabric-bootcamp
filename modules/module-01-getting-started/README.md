@@ -155,7 +155,7 @@ Before proceeding to Module 2, verify you have completed:
 
 ## Architecture Review
 
-After completing this module, your hub infrastructure should look like this:
+After completing this module, your Azure infrastructure should look like this:
 
 ```text
 rg-hub-bootcamp
