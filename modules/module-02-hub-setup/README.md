@@ -103,11 +103,11 @@ By the end of this module, you will have:
 1. **Basics** tab configuration:
    - **Virtual machine name**: `vm-hub-jumpbox`
    - **Region**: `Canada Central`
-   - **Availability options**: `No infrastructure redundancy required`
-   - **Image**: `Windows 11 Pro, version 24H2 - x64 Gen2`
-   - **Size**: `Standard_B2s - 2 vcpus, 4 GiB memory`
+   - **Availability options**: `No infrastructure`
+   - **Image**: `Windows 11 Pro, Version 24H2 - x64 Gen2`
+   - **Size**: `Standard_D2s_v3 - 2 vcpus, 8 GiB memory`
 
-![create-vm.screenshot](images/4.2-create-vm.png)
+![create-vm.animation](images/4.2-create-image.png)
 
 ### 4.3 Configure Authentication
 1. **Authentication type**: `Password`
@@ -116,7 +116,8 @@ By the end of this module, you will have:
 4. **Confirm password**: Re-enter your password
 5. **Public inbound ports**: `None` ⚠️ **IMPORTANT**
 
-![create-vm.screenshot](images/4.3-create-vm.png)
+
+![create-vm-auth.screenshot](images/4.3-create-image-auth.png)
 
 ### 4.4 Configure VM Disks
 1. Click **"Next: Disks >"**
@@ -166,6 +167,7 @@ By the end of this module, you will have:
 3. Test basic connectivity by opening Command Prompt and running:
    ```cmd
    ipconfig
+   ping 8.8.8.8
    ```
 
 ![connectivity-test.animation](images/5.3-connectivity-jumpbox.gif)
