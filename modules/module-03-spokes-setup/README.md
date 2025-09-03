@@ -31,6 +31,8 @@ By the end of this module, you will have:
    - **Name**: `vnet-spoke1`
    - **Region**: `Canada Central`
 
+![create-vnet.screenshot](images/1.2-create-vnet.png)
+
 #### 1.3 Skip Security Features
 1. Click **"Next: Security >"**
 2. **Do not enable Azure Bastion** (we'll use the hub Bastion)
@@ -44,6 +46,8 @@ By the end of this module, you will have:
    - **Subnet address range**: `192.168.1.0/25`
    - Click **"Save"**
 3. Click **"Review + create"** then **"Create"**
+
+![create-vm-subnet.screenshot](images/1.4-create-vm-subnets.png)
 
 ---
 
@@ -60,13 +64,17 @@ By the end of this module, you will have:
    - **Region**: `Canada Central`
    - **Availability options**: `No infrastructure redundancy required`
    - **Image**: `Ubuntu Server 24.04 LTS - x64 Gen2`
-   - **Size**: `Standard_D2s_v3 (2 vcpus, 8 GiB memory)`
+   - **Size**: `Standard_B1ls (1 vcpus, 0.5 GiB memory)`
+
+![create-vm-type.animation](images/2.2-create-vm-type.gif)
 
 #### 2.3 Configure Authentication
 1. **Authentication type**: `Password`
 2. **Username**: `azureuser`
 3. **Password**: Create a strong password (save it securely!)
 4. **Public inbound ports**: `None` ⚠️ **IMPORTANT**
+
+![create-vm-auth.screenshot](images/2.3-create-vm-pass.png)
 
 #### 2.4 Configure Networking
 1. Click **"Next: Disks >"** (keep defaults)
@@ -76,6 +84,8 @@ By the end of this module, you will have:
    - **Subnet**: `protected (192.168.1.0/25)`
    - **Public IP**: `None` ⚠️ **IMPORTANT**
 4. Click **"Review + create"** then **"Create"**
+
+![create-vm-network.screenchot](images/2.4-create-vm-network.png)
 
 ---
 
