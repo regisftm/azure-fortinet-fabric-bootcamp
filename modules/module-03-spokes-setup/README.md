@@ -164,7 +164,7 @@ Before proceeding to Module 4, verify you have created:
 **All VMs should have:**
 - [ ] No public IP addresses
 - [ ] Password authentication with `azureuser`
-- [ ] Standard_B1s size
+- [ ] Standard_B1ls size
 - [ ] Ubuntu Server 24.04 LTS
 
 ---
@@ -173,44 +173,7 @@ Before proceeding to Module 4, verify you have created:
 
 After completing this module, your infrastructure should look like this:
 
-```mermaid
-graph TB
-    subgraph "rg-hub-bootcamp"
-        subgraph "vnet-hub (10.16.0.0/16)"
-            subgraph "protected-hub [10.16.6.0/24]"
-                HUBVM[vm-hub-jumpbox<br/>Windows 11 Pro]
-            end
-            subgraph "AzureBastionSubnet (10.16.1.0/24)"
-                BASTION[bas-hub]
-            end
-        end
-    end
-
-    subgraph "rg-spoke1-bootcamp"
-        subgraph "vnet-spoke1 (192.168.1.0/24)"
-            subgraph "protected-s1 [192.168.1.0/25]"
-                VM1A[vm-spoke1a<br/>Ubuntu 24.04]
-                VM1B[vm-spoke1b<br/>Ubuntu 24.04]
-            end
-        end
-    end
-
-    subgraph "rg-spoke2-bootcamp"
-        subgraph "vnet-spoke2 (192.168.2.0/24)"
-            subgraph "protected-s2 [192.168.2.0/25]"
-                VM2A[vm-spoke2a<br/>Ubuntu 24.04]
-            end
-        end
-    end
-    
-    %% No connections yet - isolated networks
-    
-    style HUBVM fill:#e1f5fe
-    style VM1A fill:#e8f5e8
-    style VM1B fill:#e8f5e8
-    style VM2A fill:#fff3e0
-    style BASTION fill:#f3e5f5
-```
+![architecture-review.image](images/arch-review-mod3.png)
 
 > [!NOTE]
 > **Current State**: All networks are **isolated** - no connectivity between hub and spokes yet. We'll establish connectivity in Module 4 with VNet peering.
