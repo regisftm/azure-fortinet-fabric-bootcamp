@@ -19,7 +19,9 @@ By the end of this module, you will have:
 ### 1.1 Navigate to Hub VNet
 1. Go to **Resource groups** → **`rg-hub-bootcamp`**
 2. Click on **`vnet-hub`**
-3. In the left menu, click **"Peerings"**
+3. In the left menu, click **"Settings > Peerings"**
+
+![vnet-peering.screenshot](images/1.1-vnet-peering.png)
 
 ### 1.2 Configure Spoke1 Peering
 1. Click **"+ Add"**
