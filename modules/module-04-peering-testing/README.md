@@ -33,11 +33,13 @@ By the end of this module, you will have:
    - **Allow 'vnet-spoke1' to receive forwarded traffic from 'vnet-hub'**: `Allow (default)`
    - **Virtual network gateway or Route Server**: `None (default)`
 
+![peering-remote.screenshot](images/1.2.2-peering-remote.png)
+
 3. **Local virtual network summary** (bottom section):
    - **Remote virtual network - Peering link name**: `hub-to-spoke1`
    - **Allow 'vnet-hub' to access 'vnet-spoke1'**: `Allow (default)`
 
-
+![peering-local.screenshot](images/1.2.3-peering-local.png)
 
 4. Click **"Add"**
 
@@ -51,21 +53,28 @@ By the end of this module, you will have:
 ### 2.1 Add Second Peering
 1. Still in **`vnet-hub`** → **"Peerings"**
 2. Click **"+ Add"** 
-3. **This virtual network summary** (top section):
-   - **This virtual network - Peering link name**: `hub-to-spoke2`
-   - **Traffic to remote virtual network**: `Allow (default)`
-   - **Traffic forwarded from remote virtual network**: `Allow (default)`
-   - **Virtual network gateway or Route Server**: `None (default)`
-
-4. **Remote virtual network summary** (bottom section):
+3. **Remote virtual network summary** (top section):
+   - **Peering link name**: `spoke2-to-hub`
    - **Subscription**: Your subscription
    - **Virtual network**: `vnet-spoke2`
-   - **Remote virtual network - Peering link name**: `spoke2-to-hub`
-   - **Traffic to remote virtual network**: `Allow (default)`
-   - **Traffic forwarded from remote virtual network**: `Block traffic that originates from outside this virtual network`
+   - **Allow 'vnet-spoke2' to access 'vnet-hub'**: `Allow (default)`
+   - **Allow 'vnet-spoke2' to receive forwarded traffic from 'vnet-hub'**: `Allow (default)`
    - **Virtual network gateway or Route Server**: `None (default)`
 
+![spoke2-to-hub.screenshot](images/2.2.3spoke2-to-hub.png)
+
+4. **Local virtual network summary** (bottom section):
+   - **Remote virtual network - Peering link name**: `hub-to-spoke2`
+   - **Allow 'vnet-hub' to access 'vnet-spoke2'**: `Allow (default)`
+
+![hub-to-spoke2.screenshot](images/2.2.4-hub-to-spoke2-local.png)
+
 5. Click **"Add"**
+
+> [!NOTE]
+> **Peering Status**: Initial status shows "Updating" then changes to "Connected" when successful.
+
+![peers-connected.screenshot](images/peers-connected.png)
 
 ---
 
@@ -75,6 +84,9 @@ By the end of this module, you will have:
 1. Navigate to **`rg-spoke1-bootcamp`**
 2. Click on **`vm-spoke1a`**
 3. In the **Overview** section, note the **Private IP address** (should be `192.168.1.4`)
+
+![vm-spoke1a-ip-verification.screenshot](images/ip-verification.png)
+
 4. Repeat for **`vm-spoke1b`** (should be `192.168.1.5`)
 
 ### 3.2 Check Spoke2 VM IP
@@ -100,8 +112,9 @@ From the Windows Command Prompt in vm-hub-jumpbox:
 ping 192.168.1.4
 ping 192.168.1.5
 ```
-
 **Expected Result**: Both pings should be successful, showing round-trip times.
+
+![ping-results-spoke1.screenshot](images/ping-spoke1.png)
 
 ### 4.3 Test Hub-to-Spoke2 Connectivity
 ```cmd
@@ -110,9 +123,13 @@ ping 192.168.2.4
 
 **Expected Result**: Ping should be successful.
 
+![ping-results-spoke2.screenshot](images/ping-spoke2.png)
+
 ### 4.4 Verify Peering Status
 1. Go back to **`vnet-hub`** → **"Peerings"**
 2. Verify both peerings show status: **"Connected"**
+
+![peering-connected.screenshot](images/peers-connected.png)
 
 ---
 
@@ -125,6 +142,8 @@ ping 192.168.2.4
 ### ❌ What Should NOT Work (Yet):
 - **Spoke1 ↔ Spoke2**: No direct communication (by design in hub-spoke topology)
 
+![ping-spoke1-spoke2-failure.screenshot](images/ping-failure.png)
+
 > [!NOTE]
 > **Hub-Spoke Design**: Spokes cannot communicate directly with each other. All inter-spoke traffic must go through the hub. This provides centralized security control.
 
@@ -136,9 +155,9 @@ Before proceeding to Module 5, verify you have completed:
 
 - [ ] Created `hub-to-spoke1` peering with status "Connected"
 - [ ] Created `hub-to-spoke2` peering with status "Connected"
+- [ ] Verified spoke VMs have expected IP addresses
 - [ ] Successfully pinged spoke1 VMs from hub jumpbox
 - [ ] Successfully pinged spoke2 VM from hub jumpbox
-- [ ] Verified spoke VMs have expected IP addresses
 
 ---
 
@@ -146,55 +165,7 @@ Before proceeding to Module 5, verify you have completed:
 
 After completing this module, your network topology should look like this:
 
-```mermaid
-graph TB
-    subgraph "rg-hub-bootcamp"
-        subgraph "vnet-hub (10.16.0.0/16)"
-            subgraph "protected-hub [10.16.6.0/24]"
-                HUBVM[vm-hub-jumpbox<br/>Windows 11 Pro<br/>10.16.6.4]
-            end
-            subgraph "AzureBastionSubnet (10.16.1.0/24)"
-                BASTION[bas-hub]
-            end
-        end
-    end
-
-    subgraph "rg-spoke1-bootcamp"
-        subgraph "vnet-spoke1 (192.168.1.0/24)"
-            subgraph "protected-s1 [192.168.1.0/25]"
-                VM1A[vm-spoke1a<br/>Ubuntu 24.04<br/>192.168.1.4]
-                VM1B[vm-spoke1b<br/>Ubuntu 24.04<br/>192.168.1.5]
-            end
-        end
-    end
-
-    subgraph "rg-spoke2-bootcamp"
-        subgraph "vnet-spoke2 (192.168.2.0/24)"
-            subgraph "protected-s2 [192.168.2.0/25]"
-                VM2A[vm-spoke2a<br/>Ubuntu 24.04<br/>192.168.2.4]
-            end
-        end
-    end
-    
-    %% Peering connections
-    HUBVM <--> VM1A
-    HUBVM <--> VM1B
-    HUBVM <--> VM2A
-    
-    %% No direct spoke-to-spoke connectivity
-    VM1A -.-> VM2A
-    VM1B -.-> VM2A
-    
-    style HUBVM fill:#e1f5fe
-    style VM1A fill:#e8f5e8
-    style VM1B fill:#e8f5e8
-    style VM2A fill:#fff3e0
-    style BASTION fill:#f3e5f5
-```
-
-**Legend:**
-- **Solid lines**: Active peered connections
-- **Dotted lines**: No direct connectivity (traffic would route through hub)
+![architecture-review-mod4.screenshot](images/arch-review-mod4.png)
 
 ---
 
@@ -216,7 +187,7 @@ graph TB
 
 ## Next Steps
 
-Once you've completed this module and verified connectivity, you're ready to proceed to **Module 5: FortiGate HA Deployment**.
+Once you've completed this module and verified connectivity, you're ready to proceed to **[Module 5 - FortiGate HA Deployment: Deploy FortiGate Firewalls in Active-Passive HA with Load Balancers](/modules/module-05-fortigate-ha-deployment/README.md)**.
 
 In Module 5, we'll deploy the FortiGate firewalls that will become the central security hub for all network traffic.
 
