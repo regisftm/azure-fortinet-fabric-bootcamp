@@ -44,8 +44,9 @@ Module 1 - [Getting Started: Azure Environment Setup and Verification](/modules/
 Module 2 - [Hub Network Infrastructure: Creating the Hub vNET with Azure Bastion](/modules/module-02-hub-setup/README.md)  
 Module 3 - [Spoke Networks Infrastructure: Creating Spoke1 and Spoke2 vNETs with Workload VMs](/modules/module-03-spokes-setup/README.md)  
 Module 4 - [VNet Peering and Connectivity Testing: Connecting Hub and Spoke Networks](/modules/module-04-peering-testing/README.md)  
-Module 5 - [FortiGate HA Deployment: Deploy FortiGate Firewalls in Active-Passive HA with Load Balancers](/modules/module-05-fortigate-ha-deployment/README.md)  
-Module 6 -  
+Module 5 - [Simulated On-Premises Environment: Setting Up Your On-Premise Environment](/modules/module-05-on-prem-environment/README.md)
+Module 6 - [FortiGate HA Deployment: Deploy FortiGate Firewalls in Active-Passive HA with Load Balancers](/modules/module-06-fortigate-ha-deployment/README.md)
+  
 ...
 
 ---

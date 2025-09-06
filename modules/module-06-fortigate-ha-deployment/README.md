@@ -1,4 +1,4 @@
-# Module 5 - FortiGate HA Deployment
+# Module 6 - FortiGate HA Deployment
 
 ## Deploy FortiGate Firewalls in Active-Passive HA with Load Balancers
 
