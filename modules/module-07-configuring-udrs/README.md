@@ -292,7 +292,9 @@ Before proceeding to Module 8, verify you have completed:
 
 **Routes Configured:**
 - [ ] Added default route (0.0.0.0/0) in `udr-spoke1` pointing to 10.16.3.4
+- [ ] Added default route (10.16.6.0/0) in `udr-spoke1` pointing to 10.16.3.4
 - [ ] Added default route (0.0.0.0/0) in `udr-spoke2` pointing to 10.16.3.4
+- [ ] Added default route (10.16.6.0/0) in `udr-spoke2` pointing to 10.16.3.4
 - [ ] Added spoke1 route (192.168.1.0/24) in `udr-hub-protected` pointing to 10.16.3.4
 - [ ] Added spoke2 route (192.168.2.0/24) in `udr-hub-protected` pointing to 10.16.3.4
 - [ ] Added internet route (0.0.0.0/0) in `udr-hub-protected` pointing to 10.16.3.4
@@ -306,7 +308,7 @@ Before proceeding to Module 8, verify you have completed:
 
 After completing this module, your traffic flow should look like this:
 
-![reference-architecture.screenshot](images/arch-refe-mod7.png)
+![reference-architecture.screenshot](images/arch-review-mod7.png)
 
 **Legend:**
 - **All traffic** now flows through UDRs to FortiGate cluster

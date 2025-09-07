@@ -66,29 +66,29 @@ By the end of this module, you will have:
    - **port3** → HASync subnet (HA synchronization)
    - **port4** → HAMgmt subnet (management)
 
-![network-interfaces.screenshot](images/2.3-nw-if.png)
+   ![network-interfaces.screenshot](images/2.3-nw-if.png)
 
 #### 2.4 Review Initial Routing
 1. Navigate to **Network** → **Static Routes**
 2. Observe the pre-configured routes for basic connectivity
 
-![route-review.screenshot](images/2.4-route-review.png)
+   ![route-review.screenshot](images/2.4-route-review.png)
 
 3. Alternative view: **Dashboard** → **Network** → **"Static & Dynamic Routing"**
 
-![route-review.screenshot](images/2.4-dashboard-route-review.png)
+   ![route-review.screenshot](images/2.4-dashboard-route-review.png)
 
 #### 2.5 Check Security Policies
 1. Navigate to **Policy & Objects** → **Firewall Policy**
-2. Note: Only implicit deny rules exist (all traffic blocked by default)
+2. **Note**: Only implicit deny rules exist (all traffic blocked by default)
 
-![policy-review.screenshot](images/2.5-policy-review.png)
+   ![policy-review.screenshot](images/2.5-policy-review.png)
 
 ---
 
 ### Step 3: Create Connectivity for the vm-jumpbox-hub
 
-#### 3.1 Create Address Objects for Spokes
+#### 3.1 Create Address Objects for Hub and Spokes
 1. Navigate to **Policy & Objects** → **Addresses**
 2. Click **"Create New"**
 
@@ -100,7 +100,7 @@ By the end of this module, you will have:
 - **Static Route Configuration**: `Enable`
 - Click **"OK"**
 
-![hubb-address-configuration.screenshot](images/3.1-hub-address.png)
+  ![hubb-address-configuration.screenshot](images/3.1-hub-address.png)
 
 **Create Spoke1 Address Object:**
 - **Name**: `spoke1`
@@ -118,52 +118,106 @@ By the end of this module, you will have:
 - **Static Route Configuration**: `Enable`
 - Click **"OK"**
 
+#### 3.2 Create Static Routes for Spokes
+1. Navigate to **Network** → **Static Routes**
+2. Click **"Create New"**
 
-#### 3.2 Create a Firewal Policy to allow connections from vm-jumpbox-hub 
+**Route to Spoke1:**
+- **Destination**: Select `Named Address` → `spoke1`
+- **Gateway Address**: `10.16.3.1` (internal subnet gateway)
+- **Interface**: `port2`
+- Click **"OK"**
+
+   ![static-route-creation.screenshot](images/3.2-static-route.png)
+
+**Route to Spoke2:**
+- **Destination**: Select `Named Address` → `spoke2`
+- **Gateway Address**: `10.16.3.1` (internal subnet gateway)
+- **Interface**: `port2`
+- Click **"OK"**
+
+#### 3.3 Create a Firewal Policy to allow connections from vm-jumpbox-hub 
 1. Create a Firewall Policy to allow traffic between the protected subnet in the vnet-hub virtual network to the hosts in the spokes.
 2. In FortiGate, navigate to **Policy & Objects** → **Firewall Policy**
 3. Click **"Create New"**
 4. Configure policy:
    - **Name**: `hub_to_spokes`
+   - **Action**: `ACCEPT`
    - **Incoming Interface**: `port2` (internal)
    - **Outgoing Interface**: `port2` (external)
    - **Source**: `hub`
    - **Destination**: `spoke1`, `spoke2`
    - **Service**: `ALL`
-   - **Action**: `ACCEPT`
    - **NAT**: `Disable` (default)
+
+   ![alt text](images/3.3-fw-policy-creation.png)
+
 5. Click **"OK"**
-
-
 ---
 
-### Step 3: Initial Connectivity Testing
+### Step 4: Initial Connectivity Testing
 
-#### 3.1 Test Spoke VMs Internet Access
+#### 4.1 Test Spoke VMs Internet Access
 Connect to spoke VMs via hub jumpbox and test:
 
-**From vm-spoke1a:**
-```bash
-curl --verbose https://www.google.com
-```
-**Expected Result**: Connection fails (blocked by implicit deny)
+**From vm-hub-jumpbox:**
+1. Open the `Command Prompt`
 
+   ```bash
+   ssh azureuser@192.168.1.4
+   ```
 
+   ![ssh-connection-vm-spoke1a.screenshot](images/4.1-ssh-vm-spoke1a.png)
+
+2. From the `vm-spoke1a` test:
+
+   ```bash
+   curl -v -sI -m3 https://www.google.com
+   ```
+   
+   ![curl-google.screenshot](images/4.1-curl-google.png)
+
+   **Expected Result**: Connection fails (blocked by implicit deny)
+
+3. Disconnect from the vm-spoke1a 
+
+   ```bash
+   exit
+   ``` 
 
 **From vm-spoke2a:**
-```bash
-curl --verbose https://www.google.com
-```
-**Expected Result**: Connection fails (blocked by implicit deny)
+1. in the `Command Prompt`
 
-#### 3.2 Test Intra-Spoke Connectivity
+   ```bash
+   ssh azureuser@192.168.2.4
+   ```
+
+2. From the `vm-spoke2a` test:
+
+   ```bash
+   curl -v -sI -m3 https://www.google.com
+   ```
+
+   **Expected Result**: Connection fails (blocked by implicit deny)
+
+3. Disconnect from the vm-spoke2a 
+
+   ```bash
+   exit
+   ```
+
+#### 4.2 Test Intra-Spoke Connectivity
+
 **From vm-spoke1a to vm-spoke1b:**
+
 ```bash
 ping 192.168.1.5
 ```
+
 **Expected Result**: Works (traffic stays within same VNet, bypasses FortiGate)
 
-#### 3.3 Test Inter-Spoke Connectivity
+
+#### 4.3 Test Inter-Spoke Connectivity
 **From vm-spoke1a to vm-spoke2a:**
 ```bash
 ping 192.168.2.4
@@ -174,105 +228,80 @@ ping 192.168.2.4
 
 ## Part B: Configure North-South Traffic (Internet Access)
 
-### Step 4: Create Internet Access Policy
+### Step 5: Create Internet Access Policy
 
-#### 4.1 Create Internet Access Rule
+#### 5.1 Create Internet Access Rule
 1. In FortiGate, navigate to **Policy & Objects** → **Firewall Policy**
 2. Click **"Create New"**
 3. Configure policy:
    - **Name**: `internet_access`
+   - **Action**: `ACCEPT`  
    - **Incoming Interface**: `port2` (internal)
    - **Outgoing Interface**: `port1` (external)
    - **Source**: `all`
    - **Destination**: `all`
    - **Service**: `ALL`
-   - **Action**: `ACCEPT`
    - **NAT**: `Enable` (default)
+
+   ![firewall-policy-to-internet.screenshot](images/5.1-fw-policy-to-internet.png)
+
 4. Click **"OK"**
 
-#### 4.2 Create Address Objects for Spokes
-1. Navigate to **Policy & Objects** → **Addresses**
-2. Click **"Create New"**
+#### 5.2 Test North-South Connectivity
 
-**Create Spoke1 Address Object:**
-- **Name**: `spoke1`
-- **Interface**: `port2`
-- **Type**: `Subnet`
-- **Subnet**: `192.168.1.0/24`
-- **Static Route Configuration**: `Enable`
-- Click **"OK"**
-
-**Create Spoke2 Address Object:**
-- **Name**: `spoke2`
-- **Interface**: `port2`
-- **Type**: `Subnet`
-- **Subnet**: `192.168.2.0/24`
-- **Static Route Configuration**: `Enable`
-- Click **"OK"**
-
-#### 4.3 Create Static Routes for Spokes
-1. Navigate to **Network** → **Static Routes**
-2. Click **"Create New"**
-
-**Route to Spoke1:**
-- **Destination**: Select `Named Address` → `spoke1`
-- **Gateway Address**: `10.16.3.1` (internal subnet gateway)
-- **Interface**: `port2`
-- Click **"OK"**
-
-**Route to Spoke2:**
-- **Destination**: Select `Named Address` → `spoke2`
-- **Gateway Address**: `10.16.3.1` (internal subnet gateway)
-- **Interface**: `port2`
-- Click **"OK"**
-
-#### 4.4 Test North-South Connectivity
 **From vm-spoke1a:**
 ```bash
-curl --verbose https://www.google.com
+curl -sI -m3 https://www.google.com
 ```
 **Expected Result**: Now works (traffic flows through FortiGate)
+
+![curl-google-from-vm-spoke1.screenshot](images/5.2-curl-google.png)
 
 **From vm-spoke2a:**
 ```bash
-curl --verbose https://www.google.com
+curl -sI -m3 https://www.google.com
 ```
 **Expected Result**: Now works (traffic flows through FortiGate)
+
+![curl-google-from-vm-spoke2.screenshot](images/5.2-curl-google-spoke2.png)
 
 ---
 
 ## Part C: Configure East-West Traffic (Inter-Spoke)
 
-### Step 5: Create Inter-Spoke Policies
+### Step 6: Create Inter-Spoke Policies
 
-#### 5.1 Create Spoke1-to-Spoke2 Policy
+#### 6.1 Create Spoke1-to-Spoke2 Policy
 1. Navigate to **Policy & Objects** → **Firewall Policy**
 2. Click **"Create New"**
 3. Configure:
    - **Name**: `spoke1_to_spoke2`
+   - **Action**: `ACCEPT`   
    - **Incoming Interface**: `port2`
    - **Outgoing Interface**: `port2`
    - **Source**: `spoke1`
    - **Destination**: `spoke2`
    - **Service**: `ALL`
-   - **Action**: `ACCEPT`
    - **NAT**: `Disable` ⚠️ **Important: Turn off NAT**
+
+   ![alt text](images/6.1-fw-policy-spk1-spk2.png)
+
 4. Click **"OK"**
 
-#### 5.2 Create Spoke2-to-Spoke1 Policy (Initially Deny)
+#### 6.2 Create Spoke2-to-Spoke1 Policy (Initially Deny)
 1. Click **"Create New"**
 2. Configure:
    - **Name**: `spoke2_to_spoke1`
+   - **Action**: `DENY`  
    - **Incoming Interface**: `port2`
    - **Outgoing Interface**: `port2`
    - **Source**: `spoke2`
    - **Destination**: `spoke1`
    - **Service**: `ALL`
-   - **Action**: `DENY`
    - **NAT**: `Disable`
 4. Click **"OK"**
 
-#### 5.3 Add Inter-Spoke Routes in Azure
+#### 6.3 Add Inter-Spoke Routes in Azure
 
 **Add Spoke2 Route to Spoke1 UDR:**
 1. Navigate to **`rg-spoke1-bootcamp`** → **`udr-spoke1`**
@@ -298,7 +327,7 @@ curl --verbose https://www.google.com
    - **Next hop address**: `10.16.3.4`
 5. Click **"Add"**
 
-#### 5.4 Test Directional Traffic Flow
+#### 6.4 Test Directional Traffic Flow
 **From vm-spoke1a to vm-spoke2a:**
 ```bash
 ping 192.168.2.4
@@ -311,7 +340,7 @@ ping 192.168.1.4
 ```
 **Expected Result**: Fails (blocked by spoke2_to_spoke1 deny policy)
 
-#### 5.5 Enable Bidirectional Communication
+#### 6.5 Enable Bidirectional Communication
 1. In FortiGate, navigate to **Policy & Objects** → **Firewall Policy**
 2. Edit the **`spoke2_to_spoke1`** policy
 3. Change **Action** from `DENY` to `ACCEPT`
@@ -327,9 +356,9 @@ ping 192.168.1.4
 
 ## Part D: Implement Micro-Segmentation
 
-### Step 6: Configure Intra-Spoke Inspection
+### Step 7: Configure Intra-Spoke Inspection
 
-#### 6.1 Add Intra-Spoke Route
+#### 7.1 Add Intra-Spoke Route
 1. Navigate to **`rg-spoke1-bootcamp`** → **`udr-spoke1`**
 2. Click **"+ Add"** under Routes
 3. Configure:
@@ -340,7 +369,7 @@ ping 192.168.1.4
    - **Next hop address**: `10.16.3.4`
 4. Click **"Add"**
 
-#### 6.2 Create Micro-Segmentation Policy
+#### 7.2 Create Micro-Segmentation Policy
 1. In FortiGate, navigate to **Policy & Objects** → **Firewall Policy**
 2. Click **"Create New"**
 3. Configure:
@@ -354,7 +383,7 @@ ping 192.168.1.4
    - **NAT**: `Disable`
 4. Click **"OK"**
 
-#### 6.3 Test Micro-Segmentation
+#### 7.3 Test Micro-Segmentation
 **From vm-spoke1a to vm-spoke1b:**
 ```bash
 ping 192.168.1.5
