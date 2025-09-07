@@ -3,7 +3,7 @@
 ## Deploy FortiGate Firewalls in Active-Passive HA with Load Balancers
 
 ### Overview
-In this module, we'll deploy the core security infrastructure: FortiGate firewalls in Active-Passive High Availability mode with Azure Load Balancers. This will create the central security hub for our network topology.
+In this module, we'll deploy the core security infrastructure: FortiGate firewalls in Active-Passive High Availability mode with Azure Load Balancers. This will create the central security hub for our network topology in Azure.
 
 ### Learning Objectives
 By the end of this module, you will have:
@@ -23,8 +23,8 @@ FortiGate HA deployment requires **4 dedicated subnets** for proper operation:
 |--------|---------|------|
 | **external** | Internet access via External Load Balancer | 10.16.2.0/24 |
 | **internal** | Application gateway via Internal Load Balancer | 10.16.3.0/24 |
-| **hasync** | High Availability synchronization between firewalls | 10.16.4.0/24 |
-| **hamgmt** | Out-of-band management via public IP addresses | 10.16.5.0/24 |
+| **HASync** | High Availability synchronization between firewalls | 10.16.4.0/24 |
+| **HAMgmt** | Out-of-band management via public IP addresses | 10.16.5.0/24 |
 
 ---
 
@@ -38,7 +38,9 @@ FortiGate HA deployment requires **4 dedicated subnets** for proper operation:
 #### 1.2 Current Subnet Status
 You should see:
 - `protected` (10.16.6.0/24) - Created in Module 2
-- `AzureBastionSubnet` (10.16.1.0/24) - Created in Module 2
+- `AzureBastionSubnet` (10.16.1.0/26) - Created in Module 2
+
+![current-subnets.screenshot](images/1.2-current-subnets.png)
 
 ---
 
@@ -51,6 +53,8 @@ You should see:
    - **Subnet address range**: `10.16.2.0/24`
    - Keep all other defaults
 3. Click **"Save"**
+
+![create-external-subnet.animation](images/2.1-external-subnet.gif)
 
 #### 2.2 Create Internal Subnet
 1. Click **"+ Subnet"**
@@ -78,9 +82,11 @@ Your subnet list should now show:
 - `AzureBastionSubnet` (10.16.1.0/24)
 - `external` (10.16.2.0/24)
 - `internal` (10.16.3.0/24)
-- `hasync` (10.16.4.0/24)
-- `hamgmt` (10.16.5.0/24)
+- `HASync` (10.16.4.0/24)
+- `HAMgmt` (10.16.5.0/24)
 - `protected` (10.16.6.0/24)
+
+![verify-subnets.screenshot](images/2.5-verify-subnets.png)
 
 ---
 
@@ -98,6 +104,8 @@ Your subnet list should now show:
 1. In the plan selection, click **"Active-Passive HA with ELB/ILB"**
 2. Click **"Create"**
 
+![create-fortigate.animation](images/3.1-create-fortigate.gif)
+
 ---
 
 ### Step 4: Configure Basic Settings
@@ -107,20 +115,24 @@ Your subnet list should now show:
    - **Subscription**: Your subscription
    - **Resource group**: `rg-hub-bootcamp`
    - **Region**: `Canada Central`
+   - **FortiGate VM instance Architecture**: `X64 - Intel / AMD based processors | Gen2 VM FortiGate 7.6+`
    - **Username**: `fortinetuser`
-   - **Password**: `Chicken12345!`
-   - **FortiGate Name Prefix**: `hub`
-   - **FortiGate Image SKU**: `Bring Your Own License`
-   - **FortiGate Image Version**: `7.4.5`
-   - **Instance Type**: `Standard_F4s_v2` (default)
+   - **Password**: Create a strong password
+   - **FortiGate Name Prefix**: `hub`  
+   - Click **"Next"**
 
-#### 4.2 Availability Configuration
-1. **Availability Option**: Select **"Availability Zones"**
-2. **Availability Zone 1**: `Zone 1`
-3. **Availability Zone 2**: `Zone 2`
+![fortigate-configuration.screenshot](<images/4.1.a-fgt config.png>)
+
+1a. **Instance**
+   - **FortiGate Image SKU**: `Bring Your Own License`
+   - **FortiGate Image Version**: `7.6.4`
+   - **Instance Type**: `Standard_F4s_v2` (default) or  `Standard_D8_v4 (8vCPUs 32GiB RAM)`
+   - **Availability Option**: `Availability Zones`
+
+![instance-config.screenshot](images/4.1.1a-instance-config.png)
 
 > [!NOTE]
-> **Instance Requirements**: FortiGate HA requires minimum 4 NICs, which requires Standard_F4s_v2 (4 vCPUs). The F-series is optimized for network security workloads.
+> **Instance Requirements**: FortiGate HA requires minimum 4 NICs, which requires Standard_F4s_v2 (4 vCPUs) or similar instance - always verify the number of interfaces supported byt the instance type selected. The F-series is optimized for network security workloads.
 
 ---
 
@@ -128,8 +140,10 @@ Your subnet list should now show:
 
 #### 5.1 FortiFlex Configuration
 1. Check **"My organization is using the FortiFlex subscription service"**
-2. **FortiFlex VM1 Token**: `[Token will be provided by instructor]`
-3. **FortiFlex VM2 Token**: `[Token will be provided by instructor]`
+2. **FortiGate A FortiFlex**: `[Token will be provided by instructor]`
+3. **FortiGate B FortiFlex**: `[Token will be provided by instructor]`
+
+![alt text](images/4.1.b-licenses.png)
 
 > [!TIP]
 > If you don't have FortiFlex tokens, you can proceed with PAYG (Pay-As-You-Go) licensing by unchecking this option.
@@ -147,8 +161,12 @@ Your subnet list should now show:
    - **HA Management Subnet**: `hamgmt`
    - **Protected Subnet**: `protected`
 
+![network-config.screenshot](images/5.1.a-nw-config.png)
+
 #### 6.2 Accelerated Networking
 1. **Accelerated Networking**: Select **"Disabled"**
+
+![accelerated-network.screenshot](images/6.2.1-accel-nw.png)
 
 > [!NOTE]
 > In production, you would typically enable Accelerated Networking for better performance, but we're keeping it disabled for this lab to ensure compatibility.
@@ -165,6 +183,8 @@ Your subnet list should now show:
    - **Assignment**: `Static`
 3. Click **"OK"**
 
+![pip-creation.animation](images/7-pip-creation.gif)
+
 #### 7.2 Create Public IP for FortiGate A Management
 1. **FortiGate A Management Public IP**: Click **"Create new"**
 2. Configure:
@@ -180,6 +200,8 @@ Your subnet list should now show:
    - **SKU**: `Standard`
    - **Assignment**: `Static`
 3. Click **"OK"**
+
+![pip-verification.screenshot](images/7.3-pip-verify.png)
 
 ---
 
@@ -237,90 +259,7 @@ Once deployment completes, verify you have created:
 
 After completing this module, your infrastructure should look like this:
 
-```mermaid
-graph TB
-    subgraph "Internet"
-        WEB((Internet))
-    end
-    
-    subgraph "rg-hub-bootcamp"
-        subgraph "vnet-hub (10.16.0.0/16)"
-            subgraph "AzureBastionSubnet (10.16.1.0/24)"
-                BASTION[bas-hub]
-            end
-            
-            subgraph "external (10.16.2.0/24)"
-                ELB[External Load Balancer]
-                PIPFGT[pip-hub-fgt]
-            end
-            
-            subgraph "internal (10.16.3.0/24)"
-                ILB[Internal Load Balancer]
-            end
-            
-            subgraph "hasync (10.16.4.0/24)"
-                HASYNC[HA Sync Network]
-            end
-            
-            subgraph "hamgmt (10.16.5.0/24)"
-                MGMTA[Management A]
-                MGMTB[Management B]
-                PIPA[pip-hub-fgt-a-mgmt]
-                PIPB[pip-hub-fgt-b-mgmt]
-            end
-            
-            subgraph "protected (10.16.6.0/24)"
-                HUBVM[vm-hub-jumpbox]
-            end
-            
-            FGTA[FortiGate A<br/>hub-fgt-a]
-            FGTB[FortiGate B<br/>hub-fgt-b]
-        end
-    end
-
-    subgraph "rg-spoke1-bootcamp"
-        subgraph "vnet-spoke1 (192.168.1.0/24)"
-            VM1A[vm-spoke1a]
-            VM1B[vm-spoke1b]
-        end
-    end
-
-    subgraph "rg-spoke2-bootcamp"
-        subgraph "vnet-spoke2 (192.168.2.0/24)"
-            VM2A[vm-spoke2a]
-        end
-    end
-    
-    %% Internet connections
-    WEB --> PIPFGT
-    PIPFGT --> ELB
-    ELB --> FGTA
-    ELB --> FGTB
-    
-    %% Internal connections
-    FGTA --> ILB
-    FGTB --> ILB
-    
-    %% HA Sync
-    FGTA <--> FGTB
-    
-    %% Management
-    MGMTA --> PIPA
-    MGMTB --> PIPB
-    PIPA --> WEB
-    PIPB --> WEB
-    
-    %% Existing peering (not through FortiGate yet)
-    HUBVM <--> VM1A
-    HUBVM <--> VM1B
-    HUBVM <--> VM2A
-    
-    style FGTA fill:#ff6b6b
-    style FGTB fill:#ff6b6b
-    style ELB fill:#4ecdc4
-    style ILB fill:#45b7d1
-    style HUBVM fill:#e1f5fe
-```
+![alt text](images/architecture-review-mod6.png)
 
 ---
 

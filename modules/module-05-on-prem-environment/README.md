@@ -370,7 +370,7 @@ After completing this module, your on-premises environment should look like this
 
 ## Next Steps
 
-Once you've completed this module and verified all connectivity, you're ready to proceed to **Module 6: FortiGate HA Deployment** (in the Azure hub-spoke environment).
+Once you've completed this module and verified all connectivity, you're ready to proceed to [**Module 6 - FortiGate HA Deployment: Deploy FortiGate Firewalls in Active-Passive HA with Load Balancers**](/modules/module-06-fortigate-ha-deployment/README.md) (in the Azure hub-spoke environment).
 
 This on-premises environment will later be connected to the Azure environment via site-to-site VPN tunnel.
 
