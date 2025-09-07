@@ -86,6 +86,18 @@ Spoke VMs → UDR → Internal Load Balancer (10.16.3.4) → FortiGate Cluster �
 
 ![default-route-configuration.screenshot](images/2.4-default-route-config.png)
 
+### 2.5 Add Route to Hub protected subnet
+1. Click **"+ Add"**
+2. Configure the route:
+   - **Route name**: `to_hub_protected`
+   - **Destination type**: `IP Addresses`
+   - **Destination IP addresses/CIDR ranges**: `10.16.6.0/24`
+   - **Next hop type**: `Virtual appliance`
+   - **Next hop address**: `10.16.3.4`
+3. Click **"Add"**
+
+![route-to-hub-protected](images/2.5-route-to-hub-protected.png)
+
 ---
 
 > [!NOTE]
@@ -129,7 +141,15 @@ Spoke VMs → UDR → Internal Load Balancer (10.16.3.4) → FortiGate Cluster �
    - **Next hop address**: `10.16.3.4`
 4. Click **"Add"**
 
-
+### 3.5 Add Route to Hub protected subnet
+1. Click **"+ Add"**
+2. Configure the route:
+   - **Route name**: `to_hub_protected`
+   - **Destination type**: `IP Addresses`
+   - **Destination IP addresses/CIDR ranges**: `10.16.6.0/24`
+   - **Next hop type**: `Virtual appliance`
+   - **Next hop address**: `10.16.3.4`
+3. Click **"Add"**
 
 ---
 
