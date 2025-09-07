@@ -48,7 +48,7 @@ Spoke VMs → UDR → Internal Load Balancer (10.16.3.4) → FortiGate Cluster �
 3. Search for: **`route table`**
 4. Click **"Create"**
 
-![create-route-table](images/2.1-create-rt.gif)
+![create-route-table.animation](images/2.1-create-rt.gif)
 
 ### 2.2 Configure Spoke1 Route Table
 1. **Basics** configuration:
@@ -58,7 +58,7 @@ Spoke VMs → UDR → Internal Load Balancer (10.16.3.4) → FortiGate Cluster �
    - **Name**: `udr-spoke1`
    - **Propagate gateway routes**: `No`
 
-![create-route-spoke1](images/2.2-rt-config-spoke1.png)
+![create-route-spoke1.screenshot](images/2.2-rt-config-spoke1.png)
 
 2. Click **"Review + create"** then **"Create"**
 
@@ -71,6 +71,8 @@ Spoke VMs → UDR → Internal Load Balancer (10.16.3.4) → FortiGate Cluster �
    - **Subnet**: `protected`
 5. Click **"OK"**
 
+![associate-rt-subnet.screenshot](images/2.3-associate-rt.png)
+
 ### 2.4 Add Default Route for Spoke1
 1. In **`udr-spoke1`**, under **Settings**, click **"Routes"**
 2. Click **"+ Add"**
@@ -82,7 +84,12 @@ Spoke VMs → UDR → Internal Load Balancer (10.16.3.4) → FortiGate Cluster �
    - **Next hop address**: `10.16.3.4`
 4. Click **"Add"**
 
+![default-route-configuration.screenshot](images/2.4-default-route-config.png)
+
 ---
+
+> [!NOTE]
+> The Steps 3 and 4 are similar to Step 2. For this reason, we are not including the screenshots for the following 2 Steps. Please refer to Step 2 in case of doubt. 
 
 ## Step 3: Create and Configure Spoke2 UDR
 
@@ -121,6 +128,8 @@ Spoke VMs → UDR → Internal Load Balancer (10.16.3.4) → FortiGate Cluster �
    - **Next hop type**: `Virtual appliance`
    - **Next hop address**: `10.16.3.4`
 4. Click **"Add"**
+
+
 
 ---
 
@@ -184,6 +193,8 @@ Spoke VMs → UDR → Internal Load Balancer (10.16.3.4) → FortiGate Cluster �
    - **Next hop address**: `10.16.3.4`
 3. Click **"Add"**
 
+
+
 > [!NOTE]
 > **Why Multiple Routes for Hub**: The hub needs specific routes for spoke networks and a default route for internet traffic to ensure all communication is inspected by FortiGate, while spokes can use a single default route since all their traffic should go through the firewall.
 
@@ -197,11 +208,15 @@ Spoke VMs → UDR → Internal Load Balancer (10.16.3.4) → FortiGate Cluster �
    - **Associated subnet**: `vnet-spoke1/protected`
    - **Route**: `to_hub_firewall` pointing to `10.16.3.4`
 
+![verify-routes-spoke1.screenshot](images/5.1-verify-spoke1.png)
+
 ### 5.2 Check Spoke2 Configuration
 1. Navigate to **`udr-spoke2`**
 2. Verify:
    - **Associated subnet**: `vnet-spoke2/protected`
    - **Route**: `to_hub_firewall` pointing to `10.16.3.4`
+
+![verify-routes-spoke2.screenshot](images/5.2-verify-spoke2.png)
 
 ### 5.3 Check Hub Protected Configuration
 1. Navigate to **`udr-hub-protected`**
@@ -211,6 +226,8 @@ Spoke VMs → UDR → Internal Load Balancer (10.16.3.4) → FortiGate Cluster �
      - `to_spoke1` pointing to `10.16.3.4`
      - `to_spoke2` pointing to `10.16.3.4`
      - `to_internet` pointing to `10.16.3.4`
+
+![verify-routes-hub.screenshoot](images/5.3-verify-routes-hub-protected.png)
 
 ---
 
@@ -269,77 +286,7 @@ Before proceeding to Module 8, verify you have completed:
 
 After completing this module, your traffic flow should look like this:
 
-```mermaid
-graph TB
-    subgraph "Internet"
-        WEB((Internet))
-    end
-    
-    subgraph "rg-hub-bootcamp"
-        subgraph "vnet-hub (10.16.0.0/16)"
-            subgraph "external (10.16.2.0/24)"
-                ELB[External Load Balancer]
-            end
-            
-            subgraph "internal (10.16.3.0/24)"
-                ILB[Internal Load Balancer<br/>10.16.3.4]
-            end
-            
-            subgraph "protected-hub [10.16.6.0/24]"
-                HUBVM[vm-hub-jumpbox]
-                UDRHUB[UDR Hub:<br/>192.168.1.0/24 → 10.16.3.4<br/>192.168.2.0/24 → 10.16.3.4<br/>0.0.0.0/0 → 10.16.3.4]
-            end
-            
-            FGTA[FortiGate A]
-            FGTB[FortiGate B]
-        end
-    end
-
-    subgraph "rg-spoke1-bootcamp"
-        subgraph "vnet-spoke1 (192.168.1.0/24)"
-            subgraph "protected-s1 [192.168.1.0/25]"
-                VM1A[vm-spoke1a]
-                VM1B[vm-spoke1b]
-                UDR1[UDR: 0.0.0.0/0 → 10.16.3.4]
-            end
-        end
-    end
-
-    subgraph "rg-spoke2-bootcamp"
-        subgraph "vnet-spoke2 (192.168.2.0/24)"
-            subgraph "protected-s2 [192.168.2.0/25]"
-                VM2A[vm-spoke2a]
-                UDR2[UDR: 0.0.0.0/0 → 10.16.3.4]
-            end
-        end
-    end
-    
-    %% UDR-directed traffic flow - ALL traffic now goes through FortiGate
-    VM1A --> UDR1
-    VM1B --> UDR1
-    VM2A --> UDR2
-    HUBVM --> UDRHUB
-    
-    UDR1 --> ILB
-    UDR2 --> ILB
-    UDRHUB --> ILB
-    
-    %% FortiGate cluster
-    ILB --> FGTA
-    ILB --> FGTB
-    FGTA --> ELB
-    FGTB --> ELB
-    ELB --> WEB
-    
-    style FGTA fill:#ff6b6b
-    style FGTB fill:#ff6b6b
-    style ILB fill:#45b7d1
-    style ELB fill:#4ecdc4
-    style UDR1 fill:#fff3e0
-    style UDR2 fill:#fff3e0
-    style UDRHUB fill:#fff3e0
-    style HUBVM fill:#e1f5fe
-```
+![reference-architecture.screenshot](images/arch-refe-mod7.png)
 
 **Legend:**
 - **All traffic** now flows through UDRs to FortiGate cluster
@@ -350,7 +297,7 @@ graph TB
 
 ## Next Steps
 
-Once you've completed this module and verified the UDR configuration, you're ready to proceed to **Module 8: FortiGate Configuration and Traffic Testing**.
+Once you've completed this module and verified the UDR configuration, you're ready to proceed to [**Module 8 - FortiGate Configuration and Traffic Testing: Testing and Configuring FortiGate Security Policies**](/modules/module-08-fortigate-config-test/README.md).
 
 In Module 8, we'll configure the FortiGate firewalls to allow traffic flow and test end-to-end connectivity.
 

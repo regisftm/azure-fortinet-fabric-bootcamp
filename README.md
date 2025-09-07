@@ -45,8 +45,9 @@ Module 2 - [Hub Network Infrastructure: Creating the Hub vNET with Azure Bastion
 Module 3 - [Spoke Networks Infrastructure: Creating Spoke1 and Spoke2 vNETs with Workload VMs](/modules/module-03-spokes-setup/README.md)  
 Module 4 - [VNet Peering and Connectivity Testing: Connecting Hub and Spoke Networks](/modules/module-04-peering-testing/README.md)  
 Module 5 - [Simulated On-Premises Environment: Setting Up Your On-Premise Environment](/modules/module-05-on-prem-environment/README.md)
-Module 6 - [FortiGate HA Deployment: Deploy FortiGate Firewalls in Active-Passive HA with Load Balancers](/modules/module-06-fortigate-ha-deployment/README.md)
-  
+Module 6 - [FortiGate HA Deployment: Deploy FortiGate Firewalls in Active-Passive HA with Load Balancers](/modules/module-06-fortigate-ha-deployment/README.md)  
+Module 7 - [User-Defined Routes (UDRs): Configuring Traffic Flow Through FortiGate Firewalls](/modules/module-07-configuring-udrs/README.md)  
+Module 8 - [FortiGate Configuration and Traffic Testing: Testing and Configuring FortiGate Security Policies](/modules/module-08-fortigate-config-test/README.md)  
 ...
 
 ---

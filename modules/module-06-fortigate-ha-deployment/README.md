@@ -265,7 +265,7 @@ After completing this module, your infrastructure should look like this:
 
 ## Next Steps
 
-Once deployment completes successfully, you're ready to proceed to **Module 6: User-Defined Routes (UDRs)**.
+Once deployment completes successfully, you're ready to proceed to [**Module 7 - User-Defined Routes (UDRs): Configuring Traffic Flow Through FortiGate Firewalls](/modules/module-07-configuring-udrs/README.md)
 
 In Module 6, we'll configure routing to direct all traffic through the FortiGate firewalls for security inspection.
 
