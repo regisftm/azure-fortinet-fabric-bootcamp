@@ -59,16 +59,50 @@ graph LR
 
 ### Step 1: Access On-Premises FortiGate
 
-#### 1.1 Get Public IP Address
-1. Navigate to **`rg-on-prem-bootcamp`**
+#### 1.1 Get Public IP Address - If you followed Module 05
+1. Navigate to **`rg-on-prem-bootcamp`**  
 2. Click on **`pip-on-prem-fgt`**
 3. Copy the **IP address**
+
+![get-pip-on-prem.screenshot](images/1.1-get-pip-on-prem.png)
 
 #### 1.2 Log into FortiGate
 1. Open browser: `https://[on-prem-public-ip]`
 2. Login credentials:
    - **Username**: `fortinetuser`
-   - **Password**: `Chicken12345!`
+   - **Password**: Use the password you created before
+
+#### 1.3 Change the HTTPS port for adminstrative access
+When creating a VPN on FortiGate, you'll encounter a port conflict that requires changing the administrative access port. Here's how to explain this:
+
+**The Port Conflict Issue**
+
+By default, FortiGate uses port 443 for HTTPS administrative access. However, when you configure an IPsec VPN, the IKE (Internet Key Exchange) protocol also needs to use port 443 for TCP connections in certain scenarios (like when traversing NAT devices or firewalls that block UDP 500/4500).
+
+**Why You Must Change the Admin Port**
+Since both services cannot share the same port on the same interface, you have two options:
+
+- Change the administrative HTTPS port to something else (recommended)
+- Use a different port for IKE TCP (less common)
+
+For this bootcamp, let's change the port for administrative access in the FortiGate.
+
+1. Navigate to System Settings
+
+   - **Go to System > Settings**
+   - **HTTPS port**: `8443`
+
+2. Click on **`Apply`**
+
+   ![change-https-port.screenshot](images/1.3-port-change.png)
+
+   The system will prompt you that the change requires reconnection
+
+3. Reconnect to FortiGate
+
+   Your current session will be disconnected
+   Reconnect using the new URL: https://pip-on-prem-fgt:new-port
+
 
 ---
 
@@ -78,6 +112,8 @@ graph LR
 1. Navigate to **`rg-hub-bootcamp`**
 2. Click on **`pip-hub-fgt`** (External Load Balancer Public IP)
 3. Copy the **IP address** (this will be the remote gateway)
+
+![get-pip-elb-hub.screenshot](images/2.1-get-pip-hub.png)
 
 > [!NOTE]
 > We use the External Load Balancer IP because it's the public-facing IP for the Azure FortiGate cluster.
@@ -93,27 +129,31 @@ graph LR
    - **Template**: `Site to Site`
 3. Click **"Begin"**
 
-#### 3.2 Configure Remote Site
-1. **Remote Site** configuration:
-   - **Remote site device type**: `FortiGate`
-   - **Remote site device**: `Accessible and static`
-   - **IP address**: `[Azure-FortiGate-Public-IP]` (from Step 2.1)
-   - **Remote site subnets**: `192.168.1.0/24`
-2. Click **"Next"**
+![vnp-wizard-site-to-site-begin.screenshot](images/3.1-vpn-wizard-begin.png)
 
-> [!NOTE]
-> We'll start with Spoke1 subnet (192.168.1.0/24). We can add Spoke2 later or create additional tunnels.
-
-#### 3.3 Configure VPN Tunnel
+#### 3.2 Configure VPN Tunnel
 1. **VPN Tunnel** settings:
    - **Authentication Method**: `Pre-shared Key`
-   - **Pre-shared Key**: `FortinetBootcamp2024!`
+   - **Pre-shared Key**: `FortinetBootcamp2025!`
    - **IKE**: `Version 2`
    - **Transport**: `Auto`
    - **Use Fortinet encapsulation**: `Disabled`
    - **NAT traversal**: `Enable`
    - **Keepalive frequency**: `10`
 2. Click **"Next"**
+
+![vpn-wizard-vpn-tunnel.screenshot](images/3.2-vpn-wizard-tunnel.png)
+
+#### 3.3 Configure Remote Site
+1. **Remote Site** configuration:
+   - **Remote site device type**: `FortiGate` (Logo)
+   - **Remote site device**: `Accessible and static`
+   - **IP address**: `[Azure-FortiGate-Public-IP]` (from Step 2.1)
+   - **Route this device's internet traffic through the remote site.**: `Disable`
+   - **Remote site subnets**: `192.168.1.0/24`, `192.168.2.0/24`, `10.16.6.0/24`
+2. Click **"Next"**
+
+![vpn-wizard-remote-site.screenshot](images/3.3-vpn-wizard-remote-site.png)
 
 #### 3.4 Configure Local Site
 1. **Local Site** configuration:
@@ -123,6 +163,8 @@ graph LR
    - **Local subnets**: `172.16.4.0/24` (should auto-populate)
    - **Allow remote site's internet traffic**: `Disabled`
 2. Click **"Next"**
+
+![vpn-wizard-local-site.screenshot](images/3.4-vpn-wizard-local-site.png)
 
 #### 3.5 Review and Submit
 1. Review all configurations
@@ -141,6 +183,11 @@ graph LR
 4. Open browser: `https://[azure-fortigate-mgmt-ip]`
 5. Login with same credentials
 
+> [!IMPORTANT]
+> Change the HTTPS administrative port on the hub FortiGates to 8443 as well. See Step 1.3, in case of doubt.
+
+![hub-fgt-https-port-change.screenshot](images/4.1-hub-fgt-https-port-change.png)
+
 ---
 
 ### Step 5: Create VPN on Azure FortiGate
@@ -152,7 +199,22 @@ graph LR
    - **Template**: `Site to Site`
 3. Click **"Begin"**
 
-#### 5.2 Configure Remote Site
+![vnp-wizard-site-to-site-begin.screenshot](images/5.1-vpn-wizard-begin.png)
+
+#### 5.2 Configure VPN Tunnel
+1. **VPN Tunnel** settings:
+   - **Authentication Method**: `Pre-shared Key`
+   - **Pre-shared Key**: `FortinetBootcamp2025!` (must match on-premises)
+   - **IKE**: `Version 2`
+   - **Transport**: `Auto`
+   - **Use Fortinet encapsulation**: `Disabled`
+   - **NAT traversal**: `Enable`
+   - **Keepalive frequency**: `10`
+2. Click **"Next"**
+
+![vpn-wizard-vpn-tunnel.screenshot](images/5.2-vpn-wizard-tunnel.png)
+
+#### 5.3 Configure Remote Site
 1. **Remote Site** configuration:
    - **Remote site device type**: `FortiGate`
    - **Remote site device**: `Accessible and static`
@@ -160,16 +222,7 @@ graph LR
    - **Remote site subnets**: `172.16.4.0/24`
 2. Click **"Next"**
 
-#### 5.3 Configure VPN Tunnel
-1. **VPN Tunnel** settings:
-   - **Authentication Method**: `Pre-shared Key`
-   - **Pre-shared Key**: `FortinetBootcamp2024!` (must match on-premises)
-   - **IKE**: `Version 2`
-   - **Transport**: `Auto`
-   - **Use Fortinet encapsulation**: `Disabled`
-   - **NAT traversal**: `Enable`
-   - **Keepalive frequency**: `10`
-2. Click **"Next"**
+
 
 #### 5.4 Configure Local Site
 1. **Local Site** configuration:
