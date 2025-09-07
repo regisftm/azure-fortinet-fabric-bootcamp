@@ -42,7 +42,7 @@ By the end of this module, you will have:
 2. Accept security certificate warnings
 3. Login credentials:
    - **Username**: `fortinetuser`
-   - **Password**: Use the previouly chosen password
+   - **Password**: Use the previously chosen password
 
 #### 2.2 Configure System Settings
 1. Navigate to **System** → **Settings**
@@ -100,7 +100,7 @@ By the end of this module, you will have:
 - **Static Route Configuration**: `Enable`
 - Click **"OK"**
 
-  ![hubb-address-configuration.screenshot](images/3.1-hub-address.png)
+![hubb-address-configuration.screenshot](images/3.1-hub-address.png)
 
 **Create Spoke1 Address Object:**
 - **Name**: `spoke1`
@@ -128,7 +128,7 @@ By the end of this module, you will have:
 - **Interface**: `port2`
 - Click **"OK"**
 
-   ![static-route-creation.screenshot](images/3.2-static-route.png)
+![static-route-creation.screenshot](images/3.2-static-route.png)
 
 **Route to Spoke2:**
 - **Destination**: Select `Named Address` → `spoke2`
@@ -241,7 +241,7 @@ ping 192.168.2.4
    - **Source**: `all`
    - **Destination**: `all`
    - **Service**: `ALL`
-   - **NAT**: `Enable` (default)
+   - **NAT**: `Enable` (default)  
 
    ![firewall-policy-to-internet.screenshot](images/5.1-fw-policy-to-internet.png)
 
@@ -282,9 +282,9 @@ curl -sI -m3 https://www.google.com
    - **Source**: `spoke1`
    - **Destination**: `spoke2`
    - **Service**: `ALL`
-   - **NAT**: `Disable` ⚠️ **Important: Turn off NAT**
+   - **NAT**: `Disable` ⚠️ **Important: Turn off NAT**  
 
-   ![alt text](images/6.1-fw-policy-spk1-spk2.png)
+   ![firewall-policy-spoke1-spoke2-allow.screenshot](images/6.1-fw-policy-spk1-spk2.png)
 
 4. Click **"OK"**
 
@@ -298,7 +298,9 @@ curl -sI -m3 https://www.google.com
    - **Source**: `spoke2`
    - **Destination**: `spoke1`
    - **Service**: `ALL`
-   - **NAT**: `Disable`
+
+   ![firewall-policy-spoke2-spoke1-deny.screenshot](images/6.2-fw-policy-spk2-spk1.png)
+
 4. Click **"OK"**
 
 #### 6.3 Add Inter-Spoke Routes in Azure
@@ -315,6 +317,8 @@ curl -sI -m3 https://www.google.com
    - **Next hop address**: `10.16.3.4`
 5. Click **"Add"**
 
+![route-to-spk2-on-udr-spk1.screenshot](images/6.3-route-spk2.png)
+
 **Add Spoke1 Route to Spoke2 UDR:**
 1. Navigate to **`rg-spoke2-bootcamp`** → **`udr-spoke2`**
 2. Under **Settings**, click **"Routes"**
@@ -327,30 +331,41 @@ curl -sI -m3 https://www.google.com
    - **Next hop address**: `10.16.3.4`
 5. Click **"Add"**
 
+![route-to-spk1-on-udr-spk2.screenshot](images/6.3-route.spk1.png)
+
 #### 6.4 Test Directional Traffic Flow
 **From vm-spoke1a to vm-spoke2a:**
 ```bash
-ping 192.168.2.4
+ping -c3 192.168.2.4
 ```
 **Expected Result**: Works (allowed by spoke1_to_spoke2 policy)
 
+![ping-spk1-to-spk2.screenshot](images/6.3-ping-spk1-spk2.png)
+
 **From vm-spoke2a to vm-spoke1a:**
 ```bash
-ping 192.168.1.4
+ping -c3 192.168.1.4
 ```
 **Expected Result**: Fails (blocked by spoke2_to_spoke1 deny policy)
+
+![ping-fail-spk2-to-spk1.screenshot](images/6.3-ping-fail-spk2-spk1.png)
 
 #### 6.5 Enable Bidirectional Communication
 1. In FortiGate, navigate to **Policy & Objects** → **Firewall Policy**
 2. Edit the **`spoke2_to_spoke1`** policy
 3. Change **Action** from `DENY` to `ACCEPT`
+4. Make sure that the NAT is `Disable`
 4. Click **"OK"**
+
+![firewall-policy-deny-to-allow.animation](images/6.5-fw-policy-deny-to-accept.gif)
 
 **Test again from vm-spoke2a:**
 ```bash
-ping 192.168.1.4
+ping -c3 192.168.1.4
 ```
 **Expected Result**: Now works
+
+![ping-spk2-to-spk1.screenshot](images/6.3-ping-spk2-spk1.png)
 
 ---
 
@@ -369,26 +384,33 @@ ping 192.168.1.4
    - **Next hop address**: `10.16.3.4`
 4. Click **"Add"**
 
+![add-route-internal-udr-spoke1](images/7.1-add-route-udr-spoke1.png)
+
 #### 7.2 Create Micro-Segmentation Policy
 1. In FortiGate, navigate to **Policy & Objects** → **Firewall Policy**
 2. Click **"Create New"**
 3. Configure:
    - **Name**: `spoke1_internal_deny`
+   - **Action**: `DENY`
    - **Incoming Interface**: `port2`
    - **Outgoing Interface**: `port2`
    - **Source**: `spoke1`
    - **Destination**: `spoke1`
    - **Service**: `ALL`
-   - **Action**: `DENY`
-   - **NAT**: `Disable`
+
 4. Click **"OK"**
+
+![firewall-policy-microsegmentation.screenshot](images/7.2-fw-policy-microsegmentation.png)
+
 
 #### 7.3 Test Micro-Segmentation
 **From vm-spoke1a to vm-spoke1b:**
 ```bash
-ping 192.168.1.5
+ping -c3 192.168.1.5
 ```
 **Expected Result**: Fails (now inspected and blocked by FortiGate)
+
+![ping-fails-microsegmentation.screenshot](images/7.3-ping-fails-microsegmentation.png)
 
 > [!NOTE]
 > **Micro-Segmentation**: By forcing intra-subnet traffic through the FortiGate, we can implement granular security policies even within the same network segment.
@@ -402,10 +424,11 @@ Before proceeding to the next module, verify you have completed:
 **FortiGate Configuration:**
 - [ ] Accessed FortiGate web interface successfully
 - [ ] Configured timezone and timeout settings
-- [ ] Created address objects for spoke1 and spoke2
-- [ ] Added static routes for spoke networks
+- [ ] Created address objects for hub, spoke1 and spoke2
+- [ ] Added static routes for hub and spoke networks
 
 **Security Policies:**
+- [ ] Created hub_to_spoke policy (east-west traffic)
 - [ ] Created internet_access policy (north-south traffic)
 - [ ] Created spoke1_to_spoke2 policy (east-west traffic)
 - [ ] Created spoke2_to_spoke1 policy (bidirectional east-west)
@@ -426,70 +449,13 @@ Before proceeding to the next module, verify you have completed:
 
 After completing this module, your traffic flows should work as follows:
 
-```mermaid
-graph TB
-    subgraph "Internet"
-        WEB((Internet))
-    end
-    
-    subgraph "FortiGate Security Policies"
-        POLICY1[internet_access<br/>port2→port1<br/>Allow All]
-        POLICY2[spoke1_to_spoke2<br/>port2→port2<br/>Allow]
-        POLICY3[spoke2_to_spoke1<br/>port2→port2<br/>Allow]
-        POLICY4[spoke1_internal_deny<br/>port2→port2<br/>Deny]
-    end
-    
-    subgraph "rg-hub-bootcamp"
-        subgraph "vnet-hub (10.16.0.0/16)"
-            ILB[Internal Load Balancer<br/>10.16.3.4]
-            FGTA[FortiGate A]
-            FGTB[FortiGate B]
-        end
-    end
-
-    subgraph "rg-spoke1-bootcamp"
-        subgraph "vnet-spoke1 (192.168.1.0/24)"
-            VM1A[vm-spoke1a<br/>192.168.1.4]
-            VM1B[vm-spoke1b<br/>192.168.1.5]
-        end
-    end
-
-    subgraph "rg-spoke2-bootcamp"
-        subgraph "vnet-spoke2 (192.168.2.0/24)"
-            VM2A[vm-spoke2a<br/>192.168.2.4]
-        end
-    end
-    
-    %% Traffic flows with policy enforcement
-    VM1A -->|Internet Access| POLICY1
-    VM2A -->|Internet Access| POLICY1
-    POLICY1 --> WEB
-    
-    VM1A -->|To Spoke2| POLICY2
-    VM2A -->|To Spoke1| POLICY3
-    
-    VM1A -.->|Blocked| POLICY4
-    VM1B -.->|Blocked| POLICY4
-    
-    style POLICY1 fill:#4CAF50
-    style POLICY2 fill:#4CAF50
-    style POLICY3 fill:#4CAF50
-    style POLICY4 fill:#f44336
-    style FGTA fill:#ff6b6b
-    style FGTB fill:#ff6b6b
-```
-
-**Legend:**
-- **Green policies**: Allow traffic
-- **Red policies**: Block traffic
-- **Solid lines**: Permitted traffic flows
-- **Dotted lines**: Blocked traffic flows
+![architecture-review.screenshot](images/arch-review-mod8.png)
 
 ---
 
 ## Next Steps
 
-Once you've completed this module and verified all traffic flows, you're ready to proceed to **Module 9: FortiAnalyzer and FortiManager Deployment**.
+Once you've completed this module and verified all traffic flows, you're ready to proceed to **Module 9 - Site-to-Site IPSec VPN Connecting On-Premises and Azure Environments**.  
 
 In Module 9, we'll deploy the centralized logging and management components of the Fortinet Security Fabric.
 
