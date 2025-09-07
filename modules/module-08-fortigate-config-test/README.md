@@ -455,7 +455,7 @@ After completing this module, your traffic flows should work as follows:
 
 ## Next Steps
 
-Once you've completed this module and verified all traffic flows, you're ready to proceed to **Module 9 - Site-to-Site IPSec VPN Connecting On-Premises and Azure Environments**.  
+Once you've completed this module and verified all traffic flows, you're ready to proceed to [**Module 9 - Site-to-Site IPSec VPN: Connecting On-Premises and Azure Environments**](/modules/module-09-site-to-site-vpn/README.md).  
 
 In Module 9, we'll deploy the centralized logging and management components of the Fortinet Security Fabric.
 
