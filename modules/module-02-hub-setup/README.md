@@ -97,8 +97,7 @@ By the end of this module, you will have:
 
 > [!TIP]
 > The Bastion deployment may take 5-10 minutes. This is normal for Bastion services.
----
-> [!TIP]
+>
 > :potable_water: **Hydration check**: Make sure you're drinking enough water throughout the day. It's easy to forget when you're focused on technical work, but proper hydration helps with energy and concentration. Now is the time! Go drink some water!
 
 ---
