@@ -48,11 +48,11 @@ Module 5 - [Simulated On-Premises Environment: Setting Up Your On-Premise Enviro
 Module 6 - [FortiGate HA Deployment: Deploy FortiGate Firewalls in Active-Passive HA with Load Balancers](/modules/module-06-fortigate-ha-deployment/README.md)  
 Module 7 - [User-Defined Routes (UDRs): Configuring Traffic Flow Through FortiGate Firewalls](/modules/module-07-configuring-udrs/README.md)  
 Module 8 - [FortiGate Configuration and Traffic Testing: Testing and Configuring FortiGate Security Policies](/modules/module-08-fortigate-config-test/README.md)  
-Module 9 - [Site-to-Site IPSec VPN: Connecting On-Premises and Azure Environments](/modules/module-09-site-to-site-vpn/README.md)
-Module 10 - [FortiAnalyzer Deployment: Centralized Logging and Analytics](/modules/module-10-fortianalyzer/README.md)
-Module 11 - [FortiManager Deployment: Centralized Security Management and Policy Orchestration](/modules/module-11-fortimanager/README.md)
-Module 12 - [Environment Cleanup: Removing All Bootcamp Resources](/modules/module-12-cleanup/README.md)
-
+Module 9 - [Site-to-Site IPSec VPN: Connecting On-Premises and Azure Environments](/modules/module-09-site-to-site-vpn/README.md)  
+Module 10 - [FortiAnalyzer Deployment: Centralized Logging and Analytics](/modules/module-10-fortianalyzer/README.md)  
+Module 11 - [FortiManager Deployment: Centralized Security Management and Policy Orchestration](/modules/module-11-fortimanager/README.md)  
+Module 12 - [Environment Cleanup: Removing All Bootcamp Resources](/modules/module-12-cleanup/README.md)  
+  
 ---
 
 > [!NOTE]
