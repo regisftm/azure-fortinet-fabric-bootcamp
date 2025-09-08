@@ -131,6 +131,7 @@ By the end of this module, you will have:
 3. **Password**: Create a strong password (save it securely!)
 4. **Confirm password**: Re-enter your password
 5. **Public inbound ports**: `None` ⚠️ **IMPORTANT**
+6. **I confirm I have an eligible Windows 10/11 license with multi-tenant hosting rights.**: `Check`
 
 ![create-vm-auth.screenshot](images/4.3-create-image-auth.png)
 
