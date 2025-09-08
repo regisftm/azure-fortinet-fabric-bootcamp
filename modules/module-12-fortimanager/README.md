@@ -1,4 +1,4 @@
-# Module 11 - FortiManager Deployment
+# Module 12 - FortiManager Deployment
 
 ## Centralized Security Management and Policy Orchestration
 

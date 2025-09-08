@@ -1,4 +1,4 @@
-# Module 12 - Environment Cleanup
+# Module 13 - Environment Cleanup
 
 ## Removing All Bootcamp Resources
 

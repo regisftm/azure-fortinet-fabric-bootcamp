@@ -40,7 +40,7 @@ After completing this bootcamp, you will have deployed the following architectur
 
 This bootcamp is organized in sequential modules. One module will build up on top of the previous module, so please, follow the order as proposed below.
 
-Module 1 - [Getting Started: Azure Environment Setup and Verification](/modules/module-01-getting-started/README.md)    
+Module 1 - [Getting Started: Azure Environment Setup and Verification](/modules/module-01-getting-started/README.md)  
 Module 2 - [Hub Network Infrastructure: Creating the Hub vNET with Azure Bastion](/modules/module-02-hub-setup/README.md)  
 Module 3 - [Spoke Networks Infrastructure: Creating Spoke1 and Spoke2 vNETs with Workload VMs](/modules/module-03-spokes-setup/README.md)  
 Module 4 - [VNet Peering and Connectivity Testing: Connecting Hub and Spoke Networks](/modules/module-04-peering-testing/README.md)  
@@ -50,8 +50,9 @@ Module 7 - [User-Defined Routes (UDRs): Configuring Traffic Flow Through FortiGa
 Module 8 - [FortiGate Configuration and Traffic Testing: Testing and Configuring FortiGate Security Policies](/modules/module-08-fortigate-config-test/README.md)  
 Module 9 - [Site-to-Site IPSec VPN: Connecting On-Premises and Azure Environments](/modules/module-09-site-to-site-vpn/README.md)  
 Module 10 - [FortiAnalyzer Deployment: Centralized Logging and Analytics](/modules/module-10-fortianalyzer/README.md)  
-Module 11 - [FortiManager Deployment: Centralized Security Management and Policy Orchestration](/modules/module-11-fortimanager/README.md)  
-Module 12 - [Environment Cleanup: Removing All Bootcamp Resources](/modules/module-12-cleanup/README.md)  
+Module 11 - [Fortinet Security Fabric: Building an Integrated Security Architecture](/modules/module-11-security-fabric/README.md)  
+Module 12 - [FortiManager Deployment: Centralized Security Management and Policy Orchestration](/modules/module-12-fortimanager/README.md)  
+Module 13 - [Environment Cleanup: Removing All Bootcamp Resources](/modules/module-13-cleanup/README.md)  
   
 ---
 
