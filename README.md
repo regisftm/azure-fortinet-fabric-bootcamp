@@ -56,7 +56,7 @@ Module 12 - [Environment Cleanup: Removing All Bootcamp Resources](/modules/modu
 ---
 
 > [!NOTE]
-> The workshop provides examples and sample code as instructional content for you to consume. These examples will help you understand how to configure Calico Cloud and build a functional solution. Please note that these examples are not suitable for use in production environments.
+> The workshop provides examples and sample code as instructional content for you to consume. These examples will help you understand how to configure FortiFabric and build a functional solution. Please note that these examples are not suitable for use in production environments.
 
 > [!WARNING] 
 > If you are using a subscription in your production environment, it would be more prudent not to use your "Global Admin" account. Although the lab is designed to function in "isolated" mode, a "human" error when creating certain resources ("peering", routing table, ...) could impact your production environment. We recommend using your standard account on an isolated subscription.
