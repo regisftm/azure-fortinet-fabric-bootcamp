@@ -75,47 +75,91 @@ graph TB
 ## Step 1: Deploy FortiManager VM
 
 ### 1.1 Start FortiManager Deployment
+
 1. Navigate to **`rg-hub-bootcamp`** resource group
 2. Click **"+ Create"**
 3. Search for: **`FortiManager`**
-4. Select **"Fortinet FortiManager"**
+4. Select **"FortiManager Centralized Security Management"** by Fortinet
 5. Click **"Create"**
+6. Select **"Fortinet FortiManager - Single VM"**
 
 ### 1.2 Configure Basic Settings
+
 1. **Basics** configuration:
    - **Subscription**: Your subscription
    - **Resource group**: `rg-hub-bootcamp`
    - **Region**: `Canada Central`
-   - **Virtual machine name**: `FortiManager`
-   - **Username**: `fortinetuser`
-   - **Password**: `Chicken12345!`
-   - **FortiManager Image Version**: `7.4.5`
-   - **Instance Type**: `Standard_D4s_v3` (4 vCPUs, 16 GB RAM)
+   - **FortiManager administrative username**: `fortinetuser`
+   - **FortiManager password**: Choose a strong password
+   - **FortiManager Name Prefix**: AZURE
+   - **FortiManager Image SKU**: `Bring Tour Own License or FortiFlex`
+   - **FortiManager Image Version**: `7.6.3`
+
+### 1.2 Configure Instance Settings
+
+1. **Instance**
+   - **Instance Type**: `Standard_D4s_v5` (4 vCPUs, 16 GB RAM)
+   - **Availability Option**: `No infrastructure redundancy required`
+   - **My organisation is using the FortiFlex subscription service.**: `Enable`
+   - **FortiManager FortiFlex**: Use the token provided by the instructor
+   - **Name of the FortiManager VM**: `AZURE-FMG`
 
 ### 1.3 Configure Networking
+
 1. **Networking** configuration:
    - **Virtual network**: `vnet-hub`
    - **Subnet**: `protected (10.16.6.0/24)`
+
+### 1.4 Configure Public IP
+
+1. **Public IP** configuration:
    - **Public IP**: `None` (access via Bastion)
-   - **Private IP assignment**: `Static`
-   - **Private IP address**: `10.16.6.20`
+
+### 1.5 Deploy
+
+1. Click "Review + create" then "Create"
+2. Wait for deployment to complete (~5-10 minutes)
+3. Click **"Review + create"** then **"Create"**
+
+### 1.5 Wait for Deployment
+
+FortiAnalyzer deployment typically takes 5-10 minutes.
+
+---
 
 > [!NOTE]
 > Using a static IP ensures consistent management connectivity and makes device registration easier.
 
-### 1.4 Configure Storage and Management
-1. **Storage**: Keep default settings (Premium SSD)
-2. **Management**: 
-   - **Boot diagnostics**: `Enabled`
-   - **Monitoring**: Keep defaults
-3. Click **"Review + create"** then **"Create"**
+Define a fixed ip address for FortiManager
 
-### 1.5 Wait for Deployment
-FortiManager deployment typically takes 5-10 minutes.
+1. in the rg-hub-bootcamp
+2. go to AZURE-FMG-nic1 
+3. settings > IP configurations
+4. ipconfig1
+   - Edit IP Configuration
+   - Private IP address `10.16.6.20`
+   - Save
+
 
 ---
 
 ## Step 2: Initial FortiManager Configuration
+
+### 2.1 Load the license
+1. Connect to **`vm-hub-jumpbox`** via Bastion
+2. Open a command prompt
+3. Open an SSH session to the FortiManager
+   ```bash
+   ssh fortinetuser@10.16.6.6
+   ```
+4. Run the command to load the FortiFlex license using the token gave to you by the instructor
+   ```bash
+   execute vm-license < FortiFlex token>
+   ```
+5. The FortiManager will reboot
+6. Close the command prompt
+
+
 
 ### 2.1 Access FortiManager
 1. Connect to **`vm-hub-jumpbox`** via Bastion
@@ -123,24 +167,43 @@ FortiManager deployment typically takes 5-10 minutes.
 3. Navigate to: `https://10.16.6.20`
 4. Accept security certificate warnings
 
+
 ### 2.2 Initial Setup
 1. **License Agreement**: Accept the license terms
-2. **Admin Password Setup**:
-   - **Username**: `admin`
-   - **New Password**: `Chicken12345!`
-   - **Confirm Password**: `Chicken12345!`
-3. Click **"Apply"**
+Include initial screens
 
 ### 2.3 Basic System Configuration
-1. **System Settings** → **Admin** → **Settings**:
+1. **System Settings > Settings**:
    - **Timezone**: Select your timezone
-   - **Idle timeout**: `60` minutes
-2. **System Settings** → **Network** → **Interface**:
-   - Verify interface settings show correct IP (10.16.6.20)
+   - **Idle timeout (GUI)**: `28800` Seconds
 
 ---
 
 ## Step 3: Add FortiGate Devices to FortiManager
+
+
+
+1. Go to **Security Fabric > Fabric Connectors**, then click on Central Management Settings
+2. , Edit
+12- Click on Status: “Enabled”, then enter the following information. Click on “ok” to apply the changes:
+- Type: `On-premises`
+- Mode: `Normal`
+- Server: `10.16.6.6`
+- Upload option: “Real Time”
+
+
+
+
+config system global
+
+   set fgfm-allow-vm enable
+
+end
+
+
+
+
+
 
 ### 3.1 Configure Azure FortiGate A for Management
 1. Access Azure FortiGate A management interface
