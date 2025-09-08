@@ -22,7 +22,7 @@ The estimated time to complete this bootcamp is 5 - 6 hours.
 
 **Experience Level**: Intermediate to advanced professionals with networking fundamentals and basic Azure knowledge.
 
-### What You'll Learn:
+### What You'll Learn
 
 - Deploy FortiGate firewalls in Active-Passive HA configuration using Azure Load Balancers
 - Configure FortiAnalyzer for centralized logging and analytics
@@ -57,10 +57,10 @@ Module 13 - [Environment Cleanup: Removing All Bootcamp Resources](/modules/modu
 ---
 
 > [!NOTE]
-> The workshop provides examples and sample code as instructional content for you to consume. These examples will help you understand how to configure Fortinet Security Fabric and build a functional solution. Please note that these examples are not suitable for use in production environments.  
-
-> [!WARNING]
-> If you are using a subscription in your production environment, it would be more prudent not to use your "Global Admin" account. Although the lab is designed to function in "isolated" mode, a "human" error when creating certain resources (peering, routing table, ...) could impact your production environment. We recommend using your standard account on an isolated subscription.
+> The workshop provides examples and sample code as instructional content for you to consume. These examples will help you understand how to configure Fortinet Security Fabric and build a functional solution. **Please note that these examples are not suitable for use in production environments**.  
 
 > [!CAUTION]
-> This lab uses several virtual machines. The entire lab should stay under $30. At the end of the day, it will be important to delete everything or at least stop the VMs if you don't want any unpleasant surprises.
+> If you are using an Azure subscription in your production environment, it would be more prudent not to use your "Global Admin" account. Although the lab is designed to function in "isolated" mode, a "human" error when creating certain resources such as peering and routing table could impact your production environment. **We recommend using your standard account on an isolated subscription**.
+
+> [!WARNING]
+> This lab uses several virtual machines. The entire lab should stay under **$30**. At the end of the day, it will be important to delete everything or at least stop the VMs if you don't want any unpleasant surprises.
