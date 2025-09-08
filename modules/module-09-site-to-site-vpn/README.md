@@ -150,7 +150,7 @@ For this bootcamp, let's change the port for administrative access in the FortiG
    - **Remote site device**: `Accessible and static`
    - **IP address**: `[Azure-FortiGate-Public-IP]` (from Step 2.1)
    - **Route this device's internet traffic through the remote site.**: `Disable`
-   - **Remote site subnets**: `192.168.1.0/24`, `192.168.2.0/24`, `10.16.6.0/24`
+   - **Remote site subnets**: `192.168.1.0/24`, `192.168.2.0/24`, `10.16.0.0/16`
 2. Click **"Next"**
 
 ![vpn-wizard-remote-site.screenshot](images/3.3-vpn-wizard-remote-site.png)
@@ -160,7 +160,7 @@ For this bootcamp, let's change the port for administrative access in the FortiG
    - **Outgoing interface**: `port1` (external interface)
    - **Create and add interface to zone**: `Disabled`
    - **Local Interface**: `port2` (internal interface)
-   - **Local subnets**: `172.16.4.0/24` (should auto-populate)
+   - **Local subnets**: `172.16.0.0/16` (should auto-populate)
    - **Allow remote site's internet traffic**: `Disabled`
 2. Click **"Next"**
 
@@ -219,19 +219,22 @@ For this bootcamp, let's change the port for administrative access in the FortiG
    - **Remote site device type**: `FortiGate`
    - **Remote site device**: `Accessible and static`
    - **IP address**: `[On-Prem-FortiGate-Public-IP]` (from Step 1.1)
-   - **Remote site subnets**: `172.16.4.0/24`
+   - **Route this device's internet traffic through the remote site.**: `Disable`
+   - **Remote site subnets**: `172.16.0.0/16`
 2. Click **"Next"**
 
-
+![vpn-wizard-remote-site.screenshot](images/5.3-vpn-wizard-remote-site.png)
 
 #### 5.4 Configure Local Site
 1. **Local Site** configuration:
    - **Outgoing interface**: `port1` (external interface)
    - **Create and add interface to zone**: `Disabled`
    - **Local Interface**: `port2` (internal interface)
-   - **Local subnets**: `192.168.1.0/24`
+   - **Local subnets**: `192.168.1.0/24`, `192.168.2.0/24`, `10.16.0.0/16`
    - **Allow remote site's internet traffic**: `Disabled`
 2. Click **"Next"**
+
+![vpn-wizard-local-site.screenshot](images/5.4-vpn-wizard-local-site.png)
 
 #### 5.5 Review and Submit
 1. Review all configurations
@@ -248,20 +251,28 @@ For this bootcamp, let's change the port for administrative access in the FortiG
 2. Open the **IPsec** widget
 3. Look for tunnel `to_azure_hub` - status should show **"Up"**
 
+![verify-vpn-dashboard-on-prem.screenshot](images/6.1-verify-dashboard.png)
+
 **CLI Verification:**
 ```bash
 diagnose vpn ike gateway list name to_azure_hub
 ```
+
+![verify-vpn-cli-on-prem.screenshot](images/6.1-verify-cli.png)
 
 #### 6.2 Verify Azure Tunnel
 1. In Azure FortiGate, navigate to **Dashboard** → **Network**
 2. Open the **IPsec** widget
 3. Look for tunnel `to_on_prem` - status should show **"Up"**
 
+![verify-vpn-dashboard-azure.screenshot](images/6.2-verify-dashboard.png)
+
 **CLI Verification:**
 ```bash
 diagnose vpn ike gateway list name to_on_prem
 ```
+
+![verify-vpn-cli-azure.screenshot](images/6.2-verify-dashboard.png)
 
 > [!TIP]
 > If tunnels show "Down", wait 2-3 minutes for negotiation to complete. Check that public IPs and pre-shared keys match exactly.
@@ -275,34 +286,17 @@ diagnose vpn ike gateway list name to_on_prem
 2. Open Command Prompt
 3. Test connectivity:
    ```cmd
-   ping 192.168.1.4
-   ping 192.168.1.5
+   ssh azureuser@192.168.1.4
    ```
 
 **Expected Result**: Should work if VPN tunnel is established
 
 #### 7.2 Test Azure to On-Premises
 1. Connect to **`vm-hub-jumpbox`** via Bastion
-2. From PowerShell, test to on-premises:
-   ```powershell
-   ping 172.16.4.4
+2. From RDP Client, test to on-premises: 172.16.4.4
    ```
 
 **Expected Result**: Should work through VPN tunnel
-
----
-
-### Step 8: Add Spoke2 to VPN (Optional)
-
-#### 8.1 Add Spoke2 Route on Azure Side
-1. In Azure FortiGate, navigate to **Policy & Objects** → **Addresses**
-2. Edit the automatically created address object for local subnets
-3. Add `192.168.2.0/24` to include Spoke2
-
-#### 8.2 Update VPN Phase2 Configuration
-1. Navigate to **VPN** → **IPsec Tunnels**
-2. Edit the `to_on_prem` tunnel
-3. Update local and remote networks to include both spokes
 
 ---
 
