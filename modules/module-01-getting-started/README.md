@@ -33,7 +33,7 @@ By the end of this module, you will have:
 
 ### 1.2 Identify Your Subscription
 
-1. In the Azure Portal, click on **"Subscriptions"** in the **"Azure service"** navigation menu
+1. In the Azure Portal, click on **"Subscriptions"** in the left navigation menu
    - If you don't see it, click on **"All services"** and search for "Subscriptions"
 2. Note which subscription you'll be using for this bootcamp
 3. **Important**: Ensure you're NOT using a production subscription
@@ -46,6 +46,7 @@ By the end of this module, you will have:
    - ❌ **Not suitable**: Free Trial (has significant limitations)
 
 ### 1.4 Verify Permissions
+
 1. Within your subscription, click on **"Access control (IAM)"**
 2. Click **"View my access"**
 3. Confirm you have one of these roles:
