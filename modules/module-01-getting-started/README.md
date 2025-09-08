@@ -83,7 +83,9 @@ Check that you have sufficient quota for these resources in **Canada Central**:
 ![verify-quota.screenshot](images/2.2-verify-quotas.png)
 
 ### 2.3 Request Quota Increase (If Needed)
+
 If any quotas are insufficient:
+
 1. Click on the quota item
 2. Click **"Request increase"**
 3. Submit a support request (this may take 1-2 business days)
