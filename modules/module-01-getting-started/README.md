@@ -3,15 +3,19 @@
 ## Azure Environment Setup and Verification
 
 ### Overview
+
 Before we begin building our Fortinet Security Fabric, we need to ensure your Azure environment is properly configured. This module will guide you through verifying your subscription access, checking resource quotas, and setting up cost controls.
 
 ### Prerequisites
+
 - Active Azure subscription (Pay-as-you-go or Enterprise Agreement)
 - Access to Azure Portal (portal.azure.com)
 - Basic familiarity with Azure navigation
 
 ### Learning Objectives
+
 By the end of this module, you will have:
+
 - Verified your Azure subscription permissions
 - Confirmed sufficient resource quotas for the bootcamp
 - Set up cost monitoring and alerts
@@ -22,17 +26,20 @@ By the end of this module, you will have:
 ## Step 1: Verify Subscription Access
 
 ### 1.1 Log into Azure Portal
+
 1. Navigate to [portal.azure.com](https://portal.azure.com)
 2. Sign in with your Azure credentials
 3. Once logged in, you should see the Azure Portal dashboard
 
 ### 1.2 Identify Your Subscription
-1. In the Azure Portal, click on **"Subscriptions"** in the left navigation menu
+
+1. In the Azure Portal, click on **"Subscriptions"** in the **"Azure service"** navigation menu
    - If you don't see it, click on **"All services"** and search for "Subscriptions"
 2. Note which subscription you'll be using for this bootcamp
 3. **Important**: Ensure you're NOT using a production subscription
 
 ### 1.3 Check Subscription Type
+
 1. Click on your subscription name
 2. In the **Overview** section, check the **Plan** field:
    - ✅ **Recommended**: Azure Plan, Pay-As-You-Go, Visual Studio, Enterprise Agreement
