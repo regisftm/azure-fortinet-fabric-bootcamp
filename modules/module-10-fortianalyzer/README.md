@@ -140,6 +140,8 @@ Using a static IP makes configuration easier and ensures consistent connectivity
 
 ![configuring-static-ip-faz.screenshot](images/1.6-static-ip-faz.png)
 
+---
+
 ## Step 2: Initial FortiAnalyzer Configuration
 
 ### 2.1 Load the license
@@ -216,103 +218,48 @@ Using a static IP makes configuration easier and ensures consistent connectivity
 
 7. Click **"Authorize"** in the **"Authorize Device"** window
 
-![authorized-device.screenshot](images/3.3-authorized-device.png)
+   ![authorized-device.screenshot](images/3.3-authorized-device.png)
 
-### 3.5 Verify Connection Status
+### 3.4 Verify Connection Status
 
 1. Wait a few minutes for connection establishment
 2. Refresh the FortiAnalyzer page
 3. Verify connection status shows as connected
 4. Return to the FortiGate and check **Security Fabric** → **Fabric Connectors** for connection status
 
-### 3.6 Repeat for Azure FortiGate B
+![fabric-connector-status.screenshot](images/3.4-fabric-connected.png)
 
-1. Access FortiGate B management interface
-2. Follow steps 3.2-3.5 for FortiGate B
-3. Authorize the second device in FortiAnalyzer
-
-### 3.7 Configure On-Premises FortiGate
+### 3.5 Configure On-Premises FortiGate
 
 1. Access the on-premises FortiGate web interface
-2. Repeat the same configuration process (steps 3.2-3.5)
+2. Repeat the same configuration process (steps 3.2-3.4)
 3. Use the same FortiAnalyzer IP: `10.16.6.10`
 
-## Step 3: Configure Azure FortiGate Log Forwarding
-
-### 3.1 Access Azure FortiGate
-
-1. Open new browser tab from jumpbox
-2. Navigate to FortiGate A management IP
-3. Login with FortiGate credentials
-
-1. Go to **Security Fabric > Fabric Connectors**, then click on FortiAnalyzer, Edit
-
-12- Click on “Enabled”, then enter the following information. Click on “ok” to apply the changes:
-- Server: `10.16.6.10`
-- Upload option: “Real Time”
-
-
-13- Accept the FortiAnalyzer certificate
-
-14- Authorize the on-premises FortiGate in the FortiAnalyzer.
-
-To do this, connect to the Windows VM via Azure Bastion.
-Open a webpage with Microsoft Edge to the FortiAnalyzer IP address (https://
-10.16.6.10).
-Go through the basic setup windows. Click on “Device Manager”
-
-
-15-Click on “Unauthorized Devices”
-
-
-16-Select the on-premises FortiGate, then click “Authorize”
-
-
-17-After a few minutes, refresh the page and check the connection status.
-
-Go back to FortiGate
-
-18-Check the connection status through the firewall as well (“Security Fabric” -> “
-Fabric Connectors »)
-
-Repeat for the Fortigate on-prem
-
-
-### 3.5 Repeat for FortiGate B
-
-1. Access FortiGate B using its management IP
-2. Configure identical log settings as FortiGate A
-3. Ensure both FortiGates send logs to the same FortiAnalyzer
+![all-devices-connected.screenshot](images/3.5-all-connected.png)
 
 ---
 
-## Step 3.1
+## Step 4: Configure Azure FortiGate Log settings
 
-### 3.3 Configure Event Logging
+### 4.1 Configure Event Logging
 
-1. In **Log Settings**, click **"Event Logging"**
+1. In **Log & Report**, click **"Log Settings"**
 2. Enable logging for:
+   - **UUIDs in Traffic Log**:
+     - **Address**: `Enabled`
+   - **Log Settings**:
+     - **Event logging**: `All`
+     - **Local traffic logging**: `All`
+     - **Syslog logging**: `Disable`
+   - **GUI Preferences**:
+     - **Resolve hostnames**: `Enabled`
+     - **Resolve unknown applications**: `Enabled`
 
-UUIDs in Traffic Log
- - Address: Enabled
+   ![log-settings.screenshot](images/4.1-event-logging-config.png)
 
-Log Settings
-- Event logging: All
-- Local traffic logging: All
-- Syslog logging: Disable
+3. Click **"Apply"**
 
-GUI Preferences
-- Resolve hostnames: Enabled
-- Resolve unknown applications: Enabled
-
-   - **System Events**: `Enable`
-   - **Configuration Changes**: `Enable`
-   - **Admin Login**: `Enable`
-   - **HA Events**: `Enable`
-3. Set **Send to Log Server**: `Enable`
-4. Click **"Apply"**
-
-### 3.4 Configure Traffic Logging
+### 4.2 Configure Traffic Logging
 
 1. Navigate to **Policy & Objects** → **Firewall Policy**
 2. Edit each existing policy (internet_access, spoke policies, etc.)
@@ -321,17 +268,17 @@ GUI Preferences
    - **Log Denied Traffic**: `Enable`
 4. Click **"OK"** for each policy
 
-### 3.5 Repeat for FortiGate B
+### 4.3 Repeat for FortiGate on-prem
 
-1. Access FortiGate B using its management IP
+1. Access FortiGate on-prem using its management IP
 2. Configure identical log settings as FortiGate A
 3. Ensure both FortiGates send logs to the same FortiAnalyzer
 
 ---
 
-## Step 6: Generate and View Log Data
+## Step 5 Generate and View Log Data
 
-### 6.1 Generate Traffic for Logging
+### 5.1 Generate Traffic for Logging
 
 1. From various VMs, generate different types of traffic:
 
@@ -349,19 +296,23 @@ GUI Preferences
 
 ---
 
-## Step 7: Explore FortiAnalyzer Features
+## Step 6: Explore FortiAnalyzer Features
 
-### 7.1 Dashboard Overview
+### 6.1 Dashboard Overview
 
 1. Navigate to **Dashboard** → **Status**
 2. Explore widgets
 
-### 7.1 FortiView Overview
+![dashboard-status.screenshot](images/6.1-dashboard.png)
+
+### 6.2 FortiView Overview
 
 1. Navigate to **FortiView** → **Local System Performance**
 2. Explore widgets:
 
-### 7.2 View Traffic Logs
+![fortiview-performance.screenshot](images/6.2-fortiview.png)
+
+### 6.3 View Traffic Logs
 
 1. In FortiAnalyzer, navigate to **Log View** → **Logs**
 2. Observe real-time logs from all FortiGates
@@ -370,9 +321,9 @@ GUI Preferences
    - **Source IP**: Filter by subnet
    - **Destination**: Filter by destination networks
 
-   # Why I cant see ICMP logs? #
+![view-traffic-logs.screenshot](images/6.3-view-traffic-logs.png)
 
-### 7.3 View Event Logs
+### 6.4 View Event Logs
 
 1. Navigate to **Incidents & Events** → **Event Monitor**
 2. Explore the tabs:
@@ -380,6 +331,8 @@ GUI Preferences
    - By Endpoint
    - By Threat
    - System Events
+
+![view-event-logs.screenshot](images/6.4-event-logs.png)
 
 ---
 
@@ -395,9 +348,8 @@ Before proceeding to Module 11, verify you have completed:
 
 **Log Configuration:**
 
-- [ ] Configured Azure FortiGate A Security Fabric to send logs to FortiAnalyzer
-- [ ] Configured Azure FortiGate B ecurity Fabric to send logs to FortiAnalyzer
-- [ ] Configured on-premises FortiGate to send logs via VPN
+- [ ] Configured Azure FortiGate A and B Security Fabric to send logs to FortiAnalyzer
+- [ ] Configured on-premises FortiGate to send logs via VPN to FortiAnalyzer
 - [ ] Enabled traffic logging on all firewall policies
 
 **Device Registration:**
@@ -418,46 +370,8 @@ Before proceeding to Module 11, verify you have completed:
 
 After completing this module, your logging architecture should look like this:
 
-```mermaid
-graph TB
-    subgraph "FortiAnalyzer Centralized Logging"
-        FAZ[FortiAnalyzer<br/>10.16.6.10<br/>Central Log Repository]
-    end
-    
-    subgraph "Azure Hub FortiGates"
-        FGTA[FortiGate A<br/>10.16.3.5]
-        FGTB[FortiGate B<br/>10.16.3.6]
-    end
-    
-    subgraph "On-Premises"
-        ONPREMFGT[on-prem-FGT<br/>172.16.3.4]
-    end
-    
-    subgraph "Log Types"
-        TRAFFIC[Traffic Logs<br/>- Source/Destination<br/>- Protocols<br/>- Allow/Deny]
-        EVENT[Event Logs<br/>- Admin Actions<br/>- System Events<br/>- HA Status]
-        SECURITY[Security Logs<br/>- Threats<br/>- Attacks<br/>- Policy Hits]
-    end
-    
-    %% Log flows
-    FGTA -->|syslog:514| FAZ
-    FGTB -->|syslog:514| FAZ
-    ONPREMFGT -.->|via VPN tunnel| FAZ
-    
-    %% Log types
-    FAZ --> TRAFFIC
-    FAZ --> EVENT
-    FAZ --> SECURITY
-    
-    style FAZ fill:#4CAF50
-    style FGTA fill:#ff6b6b
-    style FGTB fill:#ff6b6b
-    style ONPREMFGT fill:#ff6b6b
-    style TRAFFIC fill:#e3f2fd
-    style EVENT fill:#fff3e0
-    style SECURITY fill:#ffebee
-```
 
+      
 ---
 
 ## Troubleshooting Common Issues
