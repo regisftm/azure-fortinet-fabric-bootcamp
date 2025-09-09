@@ -73,91 +73,106 @@ graph TB
 5. Click **"Create"**
 6. Select **Fortinet Analyzer - Single VM**
 
+![create-fortianalyzer.screenshot](images/1.1-create-faz.gif)
+
 ### 1.2 Configure Basic Settings
 
 1. **Basics** configuration:
    - **Subscription**: Your subscription
    - **Resource group**: `rg-hub-bootcamp`
    - **Region**: `Canada Central`
-   - **Virtual machine name**: `FortiAnalyzer`
-   - **Username**: `fortinetuser`
-   - **Password**: Create a strong password
-   - **FortiAnalyzer Name Prefix**: hub
-   - **FortiAnalyzer Image SKU**: Bring Your Own License
+   - **FortiAnalyzer administrative username**: `fortinetuser`
+   - **FortiAnalyzer password**: Create a strong password
+   - **FortiAnalyzer Name Prefix**: `hub`
+   - **FortiAnalyzer Image SKU**: `Bring Your Own License`
    - **FortiAnalyzer Image Version**: `7.6.3`
+2. Click **"Next"**
 
-### 1.4 Configure Instance Settings
+![basics-configuration.screenshot](images/1.2-basics-config.png)
 
-1. **Instance Type**: `Standard_D4s_v5` (4 vCPUs, 16 GB RAM)
-2. **Storage**: `512GiB` - Keep default settings (Premium SSD)
-Availability Option: `No infrastructure redundancy required`
-My organisation is using the FortiFlex subscription service.: `Checked`
-FortiAnalyzer FortiFlex: Token provided by your instructor
-Name of the FortiAnalyzer VM: `hub-faz`
+### 1.3 Configure Instance Settings
 
-### 1.3 Configure Networking
+1. **Instance** configuration:
+   - **Instance Type**: `Standard_D4s_v5` (4 vCPUs, 16 GB RAM)
+   - **Storage**: `512GiB`
+   - **Type of managed disks**: `Default disks for instance type`
+  
+   ![instance-configuration-a.screenshot](images/1.3-instance-config-a.png)
+
+   - **Availability Option**: `No infrastructure redundancy required`
+   - **My organisation is using the FortiFlex subscription service.**: `Checked`
+   - **FortiAnalyzer FortiFlex**: Token provided by your instructor
+   - **Name of the FortiAnalyzer VM**: `hub-faz`
+
+   ![instance-configuration-b.screenshot](images/1.3-instance-config-b.png)
+
+2. Click **"Next"**
+
+### 1.4 Configure Networking
 
 1. **Networking** configuration:
    - **Virtual network**: `vnet-hub`
    - **Subnet**: `protected (10.16.6.0/24)`
+
+   ![networking-configuration.screenshot](images/1.4-network-config.png)
+
+2. Click **"Next"**
    - **Public IP**: `None` (access via Bastion)
+
+   ![public-ip-configuration.screenshot](images/1.4.2-pip-config.png)
 
 ### 1.5 Deploy
 
-1. Click "Review + create" then "Create"
+1. Click **"Review + create"** then **"Create"**
 2. Wait for deployment to complete (~5-10 minutes)
-3. Click **"Review + create"** then **"Create"**
 
-### 1.5 Wait for Deployment
+### 1.6 Configuring a static IP for FortiAnalyzer VM
 
-FortiAnalyzer deployment typically takes 5-10 minutes.
+Using a static IP makes configuration easier and ensures consistent connectivity even after VM restarts.
 
----
+1. Navigate to **`rg-hub-bootcamp`** resource group
+2. Select **`hub-faz-nic1`**
+3. Under **Settings**, click **"IP configurations"**
+4. Click **"ipconfig1"**
+5. Edit "**IP configurations**"
+   - **Private IP address**: `10.16.6.10`
+   - Click **"Save"**
 
-> [!NOTE]
-> Using a static IP makes configuration easier and ensures consistent connectivity even after VM restarts.
-
-Define a fixed ip address for fortianalyzer
-
-1. in the rg-hub-bootcamp
-2. go to `azure-faz-nic1`
-3. settings > IP configurations
-4. ipconfig1
-   - Edit IP Configuration
-   - Private IP address `10.16.6.10`
-   - Save
+![configuring-static-ip-faz.screenshot](images/1.6-static-ip-faz.png)
 
 ## Step 2: Initial FortiAnalyzer Configuration
 
 ### 2.1 Load the license
 
 1. Connect to **`vm-hub-jumpbox`** via Bastion
-2. Open a command prompt
-3. Open an SSH session to the FortiAnalyzer
+2. Open **Command Prompt**
+3. Open a SSH session with FortiAnalyzer
 
    ```bash
    ssh fortinetuser@10.16.6.10
    ```
 
-4. Run the command to load the FortiFlex license using the token gave to you by the instructor
+4. Run the command below to load the FortiFlex license using the token gave to you by the instructor
 
    ```bash
    execute vm-license < FortiFlex token>
    ```
 
-5. The FortiAnalyzer will reboot
-6. Close the command prompt
+5. **FortiAnalyzer** will reboot to apply the license
+6. Open **Command Prompt**
+
+![exec-vm-license.screenshot](images/2.1-vm-license.png)
 
 ### 2.2 Access FortiAnalyzer
 
-1. Open web browser
-2. Navigate to: `https://10.16.6.510`
+1. Open the web browser from **`vm-hub-jumpbox`**
+2. Navigate to: `https://10.16.6.10`
 3. Accept security certificate warnings
+4. Complete FortiAnalyzer basic setup
 
 ### 2.3 Basic System Configuration
 
 1. **System Settings > Settings**:
-   - **Timezone**: Select your timezone
    - **Idle timeout (GUI)**: `3600` Seconds (1 hour)
 
 ---
@@ -166,35 +181,42 @@ Define a fixed ip address for fortianalyzer
 
 ### 3.1 Access Azure FortiGate A
 
-1. From the hub jumpbox, open a new browser tab
-2. Navigate to the FortiGate A management IP
-3. Login with FortiGate credentials
+1. Open a new browser tab
+2. Navigate to the **FortiGate A** management IP
+3. Login with **FortiGate** credentials
 
 ### 3.2 Configure FortiAnalyzer Connector
 
 1. Navigate to **Security Fabric** → **Fabric Connectors**
 2. Click on **FortiAnalyzer**
 3. Click **"Edit"**
+
+   ![fabric-connector.screenshot](images/3.2a-fabric-connector.png)
+
 4. Configure the connector:
    - **Status**: `Enable`
    - **Server**: `10.16.6.10`
    - **Upload Option**: `Real Time`
 5. Click **"OK"** to apply changes
+6. Accept the FortiAnalyzer certificate when prompted
+7. Wait for connection establishment
 
-### 3.3 Accept FortiAnalyzer Certificate
+![alt text](images/3.2b-logging-analytics-config.png)
 
-1. Accept the FortiAnalyzer certificate when prompted
-2. Wait for connection establishment
-
-### 3.4 Authorize Device in FortiAnalyzer
+### 3.3 Authorize Device in FortiAnalyzer
 
 1. From the jumpbox, open Microsoft Edge
 2. Navigate to: `https://10.16.6.10`
-3. Complete FortiAnalyzer basic setup if prompted
-4. Navigate to **Device Manager**
-5. Click **"Unauthorized Devices"**
-6. Select the Azure FortiGate device
-7. Click **"Authorize"**
+3. Navigate to **Device Manager**
+4. Click **"Unauthorized Devices"**
+5. Select the Azure FortiGate device
+6. Click **"Authorize"**
+
+   ![authorize-faz.screenshot](images/3.3-authoriza-faz.png)
+
+7. Click **"Authorize"** in the **"Authorize Device"** window
+
+![authorized-device.screenshot](images/3.3-authorized-device.png)
 
 ### 3.5 Verify Connection Status
 
