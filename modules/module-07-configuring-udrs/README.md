@@ -283,7 +283,7 @@ After implementing UDRs, all traffic will follow this path:
 **For Internet-bound traffic:**
 
 ```text
-Spoke VM → UDR (0.0.0.0/0) → Internal LB (10.16.3.4) → FortiGate → External LB → Internet
+Hub/Spoke VM → UDR (0.0.0.0/0) → Internal LB (10.16.3.4) → FortiGate → External LB → Internet
 ```
 
 **For Inter-spoke traffic:**
