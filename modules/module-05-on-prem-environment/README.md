@@ -6,13 +6,13 @@ Before proceeding, you need an on-premise environment to connect to your Azure c
 
 Choose one of the following options:
 
-- **Option 1**: Build with Infrastructure as Code  
+- *Option 1:* **Build with Infrastructure as Code**  
 Use Terraform to automatically create your environment: [**Module 5a - On-prem environment with Terraform**](/modules/module-05a-on-prem-with-terraform/README.md)
 
-- **Option 2**: Use Your Existing Environment  
+- *Option 2:* **Use Your Existing Environment**  
 If you already have a suitable environment, skip to: [**Module 6 - FortiGate HA Deployment: Deploy FortiGate Firewalls in Active-Passive HA with Load Balancers**](/modules/module-06-fortigate-ha-deployment/README.md)
 
-- **Option 3**: Manual Setup  
+- *Option 3:* **Manual Setup**  
 Follow the step-by-step instructions in this module.
 
 > [!NOTE]
