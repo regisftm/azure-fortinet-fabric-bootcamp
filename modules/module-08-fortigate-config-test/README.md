@@ -179,7 +179,8 @@ Alternative view: **Dashboard** → **Network** → **"Static & Dynamic Routing"
    - **Source**: `hub`
    - **Destination**: `spoke1`, `spoke2`
    - **Service**: `ALL`
-   - **NAT**: `Disable` (default)
+   - **NAT**: `Disable` ⚠️ **Important: Turn off NAT**  
+   - **Log allowed traffic**: `All sessions`
 
    ![alt text](images/3.3-fw-policy-creation.png)
 
@@ -246,7 +247,7 @@ Connect to spoke VMs via hub jumpbox and test:
 **From vm-spoke1a to vm-spoke1b:**
 
 ```bash
-ping 192.168.1.5
+ping -c3 192.168.1.5
 ```
 
 **Expected Result**: Works (traffic stays within same VNet, bypasses FortiGate)
@@ -256,7 +257,7 @@ ping 192.168.1.5
 **From vm-spoke1a to vm-spoke2a:**
 
 ```bash
-ping 192.168.2.4
+ping -c3 192.168.2.4
 ```
 
 **Expected Result**: Fails (no routes configured, blocked by implicit deny)
