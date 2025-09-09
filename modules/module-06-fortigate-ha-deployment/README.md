@@ -197,7 +197,6 @@ Your subnet list should now show:
 2. Configure:
    - **Name**: `pip-hub-fgt`
    - **SKU**: `Standard` ⚠️ **Important: Change from Basic**
-   - **Assignment**: `Static`
 3. Click **"OK"**
 
 ![pip-creation.animation](images/7-pip-creation.gif)
@@ -208,7 +207,6 @@ Your subnet list should now show:
 2. Configure:
    - **Name**: `pip-hub-fgt-a-mgmt`
    - **SKU**: `Standard`
-   - **Assignment**: `Static`
 3. Click **"OK"**
 
 #### 7.3 Create Public IP for FortiGate B Management
@@ -217,7 +215,6 @@ Your subnet list should now show:
 2. Configure:
    - **Name**: `pip-hub-fgt-b-mgmt`
    - **SKU**: `Standard`
-   - **Assignment**: `Static`
 3. Click **"OK"**
 
 ![pip-verification.screenshot](images/7.3-pip-verify.png)
@@ -268,12 +265,12 @@ Once deployment completes, verify you have created:
 
 - [ ] `external` subnet (10.16.2.0/24)
 - [ ] `internal` subnet (10.16.3.0/24)
-- [ ] `hasync` subnet (10.16.4.0/24)
-- [ ] `hamgmt` subnet (10.16.5.0/24)
+- [ ] `HASync` subnet (10.16.4.0/24)
+- [ ] `HAMgmt` subnet (10.16.5.0/24)
 
 **FortiGate Resources:**
 
-- [ ] 2 FortiGate VMs (hub-fgt-a, hub-fgt-b)
+- [ ] 2 FortiGate VMs (hub-FGT-A, hub-FGT-B)
 - [ ] External Load Balancer with `pip-hub-fgt`
 - [ ] Internal Load Balancer
 - [ ] Management public IPs for both FortiGates
@@ -292,7 +289,7 @@ After completing this module, your infrastructure should look like this:
 
 Once deployment completes successfully, you're ready to proceed to [**Module 7 - User-Defined Routes (UDRs): Configuring Traffic Flow Through FortiGate Firewalls](/modules/module-07-configuring-udrs/README.md)
 
-In Module 6, we'll configure routing to direct all traffic through the FortiGate firewalls for security inspection.
+In Module 7, we'll configure routing to direct all traffic through the FortiGate firewalls for security inspection.
 
 **Estimated completion time**: 25-30 minutes (including deployment wait time)
 
