@@ -111,7 +111,7 @@ By the end of this module, you will have:
    - **Region**: `Canada Central`
    - **Availability options**: `No infrastructure redundancy required`
    - **Image**: `Windows 11 Pro, Version 24H2 - x64 Gen2`
-   - **Size**: `Standard_D2s_v3 (2 vcpus, 8 GiB memory)`
+   - **Size**: `Standard_B2s (2 vcpus, 4 GiB memory)`
 
    ![vm-create.animation](images/3.1-create-vm.gif)
 
