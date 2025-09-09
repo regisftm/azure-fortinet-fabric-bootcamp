@@ -278,7 +278,7 @@ Your subnets should now include:
 #### 6.2 Find FortiGate Internal IP
 
 1. Navigate to **`rg-on-prem-bootcamp`**
-2. Find and click **`on-prem-fgt-n6.2ic2`** (internal NIC)
+2. Find and click **`on-prem-fgt-nic2`** (internal NIC)
 3. Note the **Private IP address** (should be `172.16.3.4`)
 
    ![find-ip.screenshot](images/6.2-find-ip.gif)
@@ -346,6 +346,8 @@ Your subnets should now include:
    - **Source**: `all`
    - **Destination**: `all`
    - **Service**: `ALL`
+   - **NAT**: `Enable`
+   - **Log allowed traffic**: `All sessions`
 
    ![create-fw-policy.screenshot](images/7.3-create-fw-policy.png)
 
