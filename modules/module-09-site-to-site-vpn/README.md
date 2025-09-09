@@ -146,9 +146,8 @@ graph LR
 ![vpn-wizard-local-site.screenshot](images/3.4-vpn-wizard-local-site.png)
 
 > [!WARNING]
-> Administrative access on port1 will no longer be available because IKE TCP and HTTPS are configured to use the same port (443).  
->
-> Because we are using UDP as transport, the IKE TCP configuration  should not be created.
+> **Administrative Access Impact**: When IKE and HTTPS both use port 443, administrative access through port1 will be blocked.
+> **UDP Transport Recommendation**: Since this VPN uses UDP transport, the wizard should not be configuring IKE TCP, thus no port conflicts should happen.
 
 #### 3.5 Review and Submit
 
