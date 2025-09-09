@@ -40,9 +40,9 @@ By the end of this module, you will have:
 
 #### 1.3 Skip Security Features
 
-1. Click **"Next: Security >"**
+1. Click **"Next: Security"**
 2. **Do not enable Azure Bastion** (we'll use the hub Bastion)
-3. Click **"Next: IP Addresses >"**
+3. Click **"Next: IP Addresses"**
 
 #### 1.4 Configure IP Address Ranges
 
