@@ -188,7 +188,7 @@ Your subnets should now include:
    - **Password**: Choose a strong password
    - **FortiGate Name Prefix**: `on-prem` 
 
-   ![alt text](5.2.1-config-fgt.png)
+   ![alt text](images/5.2.1-config-fgt.png)
 
    - Click **Next**
    - **FortiGate Image SKU**: `Bring Your Own License or FortiFlex`
@@ -335,7 +335,7 @@ Your subnets should now include:
    ping 8.8.8.8
    nslookup google.com
    ```
-![test-internet-access.screenshot](8.1-test-access.png)
+![test-internet-access.screenshot](images/8.1-test-access.png)
 
 **Expected Result**: Both commands should work successfully, confirming internet access through FortiGate.
 
