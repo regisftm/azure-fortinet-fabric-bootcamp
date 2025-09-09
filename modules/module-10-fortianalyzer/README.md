@@ -370,8 +370,8 @@ Before proceeding to Module 11, verify you have completed:
 
 After completing this module, your logging architecture should look like this:
 
+![architecture-review-module-10.image](images/arch-review-mod10.png)
 
-      
 ---
 
 ## Troubleshooting Common Issues
@@ -403,8 +403,8 @@ After completing this module, your logging architecture should look like this:
 
 ## Next Steps
 
-Once you've completed this module and verified centralized logging, you're ready to proceed to **Module 11: FortiManager Deployment**.
+Once you've completed this module and verified centralized logging, you're ready to proceed to [**Module 11 - Fortinet Security Fabric: Building an Integrated Security Architecture**](/modules/module-11-security-fabric/README.md)
 
-Module 11 will complete the Security Fabric with centralized management and policy distribution.
+Module 11 will connects on-premises and Azure FortiGates into a unified Security Fabric for centralized management and threat intelligence sharing.
 
 **Estimated completion time**: 35-40 minutes
