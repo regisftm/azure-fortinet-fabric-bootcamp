@@ -294,4 +294,7 @@ In Module 7, we'll configure routing to direct all traffic through the FortiGate
 **Estimated completion time**: 25-30 minutes (including deployment wait time)
 
 > [!TIP]
-> While waiting for deployment, this is a good time to take a break or review the FortiGate documentation!
+> While waiting for deployment, this is a good time to take a break!
+>
+> :walking: Movement breaks: Even just standing up and doing some light stretching or walking around for 2-3 minutes can help improve circulation and reduce the stiffness that comes from sitting at a computer. :running:
+
