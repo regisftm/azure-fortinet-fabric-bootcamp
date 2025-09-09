@@ -239,7 +239,7 @@ After completing this module, your Azure infrastructure should look like this:
 
 ## Next Steps
 
-Once you've completed this module and verified all components are working, you're ready to proceed to **Module 3: Spoke1 Network Infrastructure**.
+Once you've completed this module and verified all components are working, you're ready to proceed to [**Module 3: Spoke1 Network Infrastructure**](/modules/module-03-spokes-setup/README.md).
 
 **Estimated completion time**: 20-25 minutes
 
