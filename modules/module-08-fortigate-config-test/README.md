@@ -143,8 +143,6 @@ Alternative view: **Dashboard** → **Network** → **"Static & Dynamic Routing"
 - **Static Route Configuration**: `Enable`
 - Click **"OK"**
 
-![static-route-summary.screenshot](images/3.1-static-routs-summary.png)
-
 #### 3.2 Create Static Routes for Spokes
 
 1. Navigate to **Network** → **Static Routes**
@@ -165,6 +163,8 @@ Alternative view: **Dashboard** → **Network** → **"Static & Dynamic Routing"
 - **Gateway Address**: `10.16.3.1` (internal subnet gateway)
 - **Interface**: `port2`
 - Click **"OK"**
+
+![static-route-summary.screenshot](images/3.1-static-routs-summary.png)
 
 #### 3.3 Create a Firewal Policy to allow connections from vm-jumpbox-hub
 
