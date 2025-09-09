@@ -493,7 +493,7 @@ Before proceeding to the next module, verify you have completed:
 - [ ] Created internet_access policy (north-south traffic)
 - [ ] Created spoke1_to_spoke2 policy (east-west traffic)
 - [ ] Created spoke2_to_spoke1 policy (bidirectional east-west)
-- [ ] Created micro-segmentation policy (intra-spoke inspection)
+- [ ] Created micro-segmentation policy (intra-spoke1 inspection)
 
 **Azure Routes:**
 
@@ -520,6 +520,6 @@ After completing this module, your traffic flows should work as follows:
 
 Once you've completed this module and verified all traffic flows, you're ready to proceed to [**Module 9 - Site-to-Site IPSec VPN: Connecting On-Premises and Azure Environments**](/modules/module-09-site-to-site-vpn/README.md).  
 
-In Module 9, we'll deploy the centralized logging and management components of the Fortinet Security Fabric.
+In Module 9, we'll connect your (simulated) on-premisse infrastructure with Azure.
 
 **Estimated completion time**: 40-45 minutes
