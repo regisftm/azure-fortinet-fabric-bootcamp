@@ -147,9 +147,8 @@ graph LR
 
 > [!WARNING]
 > Administrative access on port1 will no longer be available because IKE TCP and HTTPS are configured to use the same port (443).  
-> We will use an ssh connection to change the IKE TCP port configuration and restablish Administrative access.
 >
-> Because we are using UDP as transport, the IKE TCP configuration will not be created?
+> Because we are using UDP as transport, the IKE TCP configuration  should not be created.
 
 #### 3.5 Review and Submit
 
