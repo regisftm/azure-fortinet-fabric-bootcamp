@@ -137,15 +137,15 @@ Your subnet list should now show:
 
 1a. **Instance**
 
-- **FortiGate Image SKU**: `Bring Your Own License`
+- **FortiGate Image SKU**: `Bring Your Own License or FortiFlex`
 - **FortiGate Image Version**: `7.6.4`
-- **Instance Type**: `Standard_F4s_v2` (default) or  `Standard_D8_v4 (8vCPUs 32GiB RAM)`
+- **Instance Type**: `Standard_F8s_v2` (default) or  `Standard_D8_v4 (8vCPUs 32GiB RAM)`
 - **Availability Option**: `Availability Zones`
 
 ![instance-config.screenshot](images/4.1.1a-instance-config.png)
 
 > [!NOTE]
-> **Instance Requirements**: FortiGate HA requires minimum 4 NICs, which requires Standard_F4s_v2 (4 vCPUs) or similar instance - always verify the number of interfaces supported byt the instance type selected. The F-series is optimized for network security workloads.
+> **Instance Requirements**: FortiGate HA requires minimum 4 NICs, which requires Standard_F8s_v2 (8 vCPUs) or similar instance - always verify the number of interfaces supported by the instance type selected. The F-series is optimized for network security workloads.
 
 ---
 
@@ -154,8 +154,8 @@ Your subnet list should now show:
 #### 5.1 FortiFlex Configuration
 
 1. Check **"My organization is using the FortiFlex subscription service"**
-2. **FortiGate A FortiFlex**: `[Token will be provided by instructor]`
-3. **FortiGate B FortiFlex**: `[Token will be provided by instructor]`
+2. **FortiGate A FortiFlex**: `[Token provided by instructor]`
+3. **FortiGate B FortiFlex**: `[Token provided by instructor]`
 
 ![alt text](images/4.1.b-licenses.png)
 
@@ -172,8 +172,8 @@ Your subnet list should now show:
 2. **Subnet Mapping**:
    - **External Subnet**: `external`
    - **Internal Subnet**: `internal`
-   - **HA Sync Subnet**: `hasync`
-   - **HA Management Subnet**: `hamgmt`
+   - **HA Sync Subnet**: `HASync`
+   - **HA Management Subnet**: `HAMgmt`
    - **Protected Subnet**: `protected`
 
 ![network-config.screenshot](images/5.1.a-nw-config.png)
