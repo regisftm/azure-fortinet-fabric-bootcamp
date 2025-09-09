@@ -67,7 +67,7 @@ By the end of this module, you will have:
    - **Name**: `vnet-on-prem`
    - **Region**: `Canada Central`
 
-![create-vnet](images/2.1-create-vnet.png)
+   ![create-vnet](images/2.1-create-vnet.png)
 
 4. Click **"Next : Security"**
 
