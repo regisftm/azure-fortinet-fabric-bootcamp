@@ -233,17 +233,6 @@ Before proceeding to Module 3, verify you have completed:
 
 After completing this module, your Azure infrastructure should look like this:
 
-```text
-rg-hub-bootcamp
-├── vnet-hub (10.16.0.0/16)
-│   ├── protected subnet (10.16.6.0/24)
-│   │   └── vm-hub-jumpbox (Windows 11, Private IP only)
-│   └── AzureBastionSubnet (10.16.1.0/24)
-│       └── bas-hub
-rg-spoke1-bootcamp
-rg-spoke2-bootcamp
-```
-
 ![architecture-review.image](images/arch-review-mod2.png)
 
 ---
