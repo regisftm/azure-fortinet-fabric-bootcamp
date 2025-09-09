@@ -91,7 +91,7 @@ By the end of this module, you will have:
 > - Metadata service access
 > - DHCP services for VMs
 >
-> This IP is hardcoded into Azure's infrastructure and appears in NSG flow logs, VM network traffic, and health probe sources. It's not internet-routable and only functions within Azure's network fabric.
+> This IP is hardcoded into Azure's infrastructure and appears in NSG flow logs, VM network traffic, and health probe sources. It's not internet-routable and only functions within Azure's network fabric.  
 > You'll commonly see this IP in security logs and network monitoring - it's normal Azure platform traffic, not external communication.
 
 Alternative view: **Dashboard** → **Network** → **"Static & Dynamic Routing"**
