@@ -143,6 +143,8 @@ Alternative view: **Dashboard** → **Network** → **"Static & Dynamic Routing"
 - **Static Route Configuration**: `Enable`
 - Click **"OK"**
 
+![static-route-summary.screenshot](images/3.1-static-routs-summary.png)
+
 #### 3.2 Create Static Routes for Spokes
 
 1. Navigate to **Network** → **Static Routes**
