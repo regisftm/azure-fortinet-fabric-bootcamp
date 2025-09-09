@@ -3,10 +3,13 @@
 ## Centralized Logging and Analytics
 
 ### Overview
+
 FortiAnalyzer provides centralized logging, reporting, and analytics for all FortiGate devices in your security fabric. In this module, we'll deploy FortiAnalyzer in the Azure hub network and configure it to collect logs from both the Azure FortiGate cluster and the on-premises FortiGate.
 
 ### Learning Objectives
+
 By the end of this module, you will have:
+
 - Deployed FortiAnalyzer VM in the Azure hub network
 - Configured log forwarding from Azure FortiGate cluster
 - Set up log collection from on-premises FortiGate
@@ -18,6 +21,7 @@ By the end of this module, you will have:
 ## Understanding FortiAnalyzer Architecture
 
 ### Deployment Overview
+
 ```mermaid
 graph TB
     subgraph "Azure Hub (10.16.0.0/16)"
@@ -61,14 +65,16 @@ graph TB
 ## Step 1: Deploy FortiAnalyzer VM
 
 ### 1.1 Start FortiAnalyzer Deployment
+
 1. Navigate to **`rg-hub-bootcamp`** resource group
 2. Click **"+ Create"**
 3. Search for: **`FortiAnalyzer`**
 4. Select **"FortiAnalyzer Centralized Log Analytics by Fortinet"**
 5. Click **"Create"**
-5. Select **Fortinet Analyzer - Single VM**
+6. Select **Fortinet Analyzer - Single VM**
 
 ### 1.2 Configure Basic Settings
+
 1. **Basics** configuration:
    - **Subscription**: Your subscription
    - **Resource group**: `rg-hub-bootcamp`
@@ -81,6 +87,7 @@ graph TB
    - **FortiAnalyzer Image Version**: `7.6.3`
 
 ### 1.4 Configure Instance Settings
+
 1. **Instance Type**: `Standard_D4s_v5` (4 vCPUs, 16 GB RAM)
 2. **Storage**: `512GiB` - Keep default settings (Premium SSD)
 Availability Option: `No infrastructure redundancy required`
@@ -88,8 +95,8 @@ My organisation is using the FortiFlex subscription service.: `Checked`
 FortiAnalyzer FortiFlex: Token provided by your instructor
 Name of the FortiAnalyzer VM: `hub-faz`
 
-
 ### 1.3 Configure Networking
+
 1. **Networking** configuration:
    - **Virtual network**: `vnet-hub`
    - **Subnet**: `protected (10.16.6.0/24)`
@@ -102,6 +109,7 @@ Name of the FortiAnalyzer VM: `hub-faz`
 3. Click **"Review + create"** then **"Create"**
 
 ### 1.5 Wait for Deployment
+
 FortiAnalyzer deployment typically takes 5-10 minutes.
 
 ---
@@ -112,53 +120,108 @@ FortiAnalyzer deployment typically takes 5-10 minutes.
 Define a fixed ip address for fortianalyzer
 
 1. in the rg-hub-bootcamp
-2. go to azure-faz-nic1 
+2. go to `azure-faz-nic1`
 3. settings > IP configurations
 4. ipconfig1
    - Edit IP Configuration
    - Private IP address `10.16.6.10`
    - Save
 
-
-
 ## Step 2: Initial FortiAnalyzer Configuration
 
-
 ### 2.1 Load the license
+
 1. Connect to **`vm-hub-jumpbox`** via Bastion
 2. Open a command prompt
 3. Open an SSH session to the FortiAnalyzer
+
    ```bash
    ssh fortinetuser@10.16.6.10
    ```
+
 4. Run the command to load the FortiFlex license using the token gave to you by the instructor
+
    ```bash
    execute vm-license < FortiFlex token>
    ```
+
 5. The FortiAnalyzer will reboot
 6. Close the command prompt
 
 ### 2.2 Access FortiAnalyzer
-2. Open web browser
-3. Navigate to: `https://10.16.6.510`
-4. Accept security certificate warnings
 
+1. Open web browser
+2. Navigate to: `https://10.16.6.510`
+3. Accept security certificate warnings
 
 ### 2.3 Basic System Configuration
+
 1. **System Settings > Settings**:
    - **Timezone**: Select your timezone
-   - **Idle timeout (GUI)**: `28800` Seconds
+   - **Idle timeout (GUI)**: `3600` Seconds (1 hour)
 
 ---
 
 ## Step 3: Configure Azure FortiGate Log Forwarding
 
+### 3.1 Access Azure FortiGate A
+
+1. From the hub jumpbox, open a new browser tab
+2. Navigate to the FortiGate A management IP
+3. Login with FortiGate credentials
+
+### 3.2 Configure FortiAnalyzer Connector
+
+1. Navigate to **Security Fabric** → **Fabric Connectors**
+2. Click on **FortiAnalyzer**
+3. Click **"Edit"**
+4. Configure the connector:
+   - **Status**: `Enable`
+   - **Server**: `10.16.6.10`
+   - **Upload Option**: `Real Time`
+5. Click **"OK"** to apply changes
+
+### 3.3 Accept FortiAnalyzer Certificate
+
+1. Accept the FortiAnalyzer certificate when prompted
+2. Wait for connection establishment
+
+### 3.4 Authorize Device in FortiAnalyzer
+
+1. From the jumpbox, open Microsoft Edge
+2. Navigate to: `https://10.16.6.10`
+3. Complete FortiAnalyzer basic setup if prompted
+4. Navigate to **Device Manager**
+5. Click **"Unauthorized Devices"**
+6. Select the Azure FortiGate device
+7. Click **"Authorize"**
+
+### 3.5 Verify Connection Status
+
+1. Wait a few minutes for connection establishment
+2. Refresh the FortiAnalyzer page
+3. Verify connection status shows as connected
+4. Return to the FortiGate and check **Security Fabric** → **Fabric Connectors** for connection status
+
+### 3.6 Repeat for Azure FortiGate B
+
+1. Access FortiGate B management interface
+2. Follow steps 3.2-3.5 for FortiGate B
+3. Authorize the second device in FortiAnalyzer
+
+### 3.7 Configure On-Premises FortiGate
+
+1. Access the on-premises FortiGate web interface
+2. Repeat the same configuration process (steps 3.2-3.5)
+3. Use the same FortiAnalyzer IP: `10.16.6.10`
+
+## Step 3: Configure Azure FortiGate Log Forwarding
+
 ### 3.1 Access Azure FortiGate
+
 1. Open new browser tab from jumpbox
 2. Navigate to FortiGate A management IP
 3. Login with FortiGate credentials
-
-
 
 1. Go to **Security Fabric > Fabric Connectors**, then click on FortiAnalyzer, Edit
 
@@ -194,6 +257,7 @@ Repeat for the Fortigate on-prem
 
 
 ### 3.5 Repeat for FortiGate B
+
 1. Access FortiGate B using its management IP
 2. Configure identical log settings as FortiGate A
 3. Ensure both FortiGates send logs to the same FortiAnalyzer
@@ -202,8 +266,8 @@ Repeat for the Fortigate on-prem
 
 ## Step 3.1
 
-
 ### 3.3 Configure Event Logging
+
 1. In **Log Settings**, click **"Event Logging"**
 2. Enable logging for:
 
@@ -227,6 +291,7 @@ GUI Preferences
 4. Click **"Apply"**
 
 ### 3.4 Configure Traffic Logging
+
 1. Navigate to **Policy & Objects** → **Firewall Policy**
 2. Edit each existing policy (internet_access, spoke policies, etc.)
 3. In **Security Profiles** section:
@@ -235,19 +300,19 @@ GUI Preferences
 4. Click **"OK"** for each policy
 
 ### 3.5 Repeat for FortiGate B
+
 1. Access FortiGate B using its management IP
 2. Configure identical log settings as FortiGate A
 3. Ensure both FortiGates send logs to the same FortiAnalyzer
 
 ---
 
-
----
-
 ## Step 6: Generate and View Log Data
 
 ### 6.1 Generate Traffic for Logging
+
 1. From various VMs, generate different types of traffic:
+
    ```bash
    # Internet access (generates traffic logs)
    curl https://www.fortinet.com
@@ -265,15 +330,17 @@ GUI Preferences
 ## Step 7: Explore FortiAnalyzer Features
 
 ### 7.1 Dashboard Overview
+
 1. Navigate to **Dashboard** → **Status**
 2. Explore widgets
 
 ### 7.1 FortiView Overview
+
 1. Navigate to **FortiView** → **Local System Performance**
 2. Explore widgets:
 
+### 7.2 View Traffic Logs
 
-### 6.2 View Traffic Logs
 1. In FortiAnalyzer, navigate to **Log View** → **Logs**
 2. Observe real-time logs from all FortiGates
 3. Filter by:
@@ -281,9 +348,10 @@ GUI Preferences
    - **Source IP**: Filter by subnet
    - **Destination**: Filter by destination networks
 
-# Why I cant see ICMP logs? #
+   # Why I cant see ICMP logs? #
 
-### 6.3 View Event Logs
+### 7.3 View Event Logs
+
 1. Navigate to **Incidents & Events** → **Event Monitor**
 2. Explore the tabs:
    - All events
@@ -298,22 +366,26 @@ GUI Preferences
 Before proceeding to Module 11, verify you have completed:
 
 **FortiAnalyzer Deployment:**
+
 - [ ] Deployed FortiAnalyzer VM with static IP 10.16.6.10
 - [ ] Completed initial setup and admin password configuration
 - [ ] Configured timezone and system settings
 
 **Log Configuration:**
+
 - [ ] Configured Azure FortiGate A Security Fabric to send logs to FortiAnalyzer
 - [ ] Configured Azure FortiGate B ecurity Fabric to send logs to FortiAnalyzer
 - [ ] Configured on-premises FortiGate to send logs via VPN
 - [ ] Enabled traffic logging on all firewall policies
 
 **Device Registration:**
+
 - [ ] Added all three FortiGates to FortiAnalyzer device list
 - [ ] Verified connectivity status shows as connected
 - [ ] Generated test traffic and confirmed logs are being received
 
 **Analytics Verification:**
+
 - [ ] Viewed traffic logs from all devices
 - [ ] Reviewed event logs for system activities
 - [ ] Explored dashboard and reporting features
@@ -369,18 +441,24 @@ graph TB
 ## Troubleshooting Common Issues
 
 ### Issue: FortiAnalyzer not receiving logs
+
 **Solution:**
+
 - Verify if FortiGate Fabric Connectors for FortiAnalyzer is `Connected`
 - Check that traffic logging is enabled on firewall policies
 
 ### Issue: On-premises logs not appearing
+
 **Solution:**
+
 - Verify VPN tunnel is established and stable
 - Check that on-premises FortiGate can reach 10.16.6.10 through tunnel
 - Confirm remote logging configuration on on-premises device
 
 ### Issue: Device registration fails
+
 **Solution:**
+
 - Verify IP addresses are correct and reachable
 - Check admin credentials are correct
 - Ensure devices are not behind additional firewalls blocking management traffic
