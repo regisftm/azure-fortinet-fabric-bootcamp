@@ -66,14 +66,14 @@ You should see:
 #### 2.3 Create HA Sync Subnet
 1. Click **"+ Subnet"**
 2. Configure:
-   - **Name**: `hasync`
+   - **Name**: `HASync`
    - **Subnet address range**: `10.16.4.0/24`
 3. Click **"Add"**
 
 #### 2.4 Create HA Management Subnet
 1. Click **"+ Subnet"**
 2. Configure:
-   - **Name**: `hamgmt`
+   - **Name**: `HAMgmt`
    - **Subnet address range**: `10.16.5.0/24`
 3. Click **"Add"**
 
