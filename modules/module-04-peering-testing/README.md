@@ -49,7 +49,7 @@ By the end of this module, you will have:
 4. Click **"Add"**
 
 > [!NOTE]
-> **Peering Status**: Initial status shows "Updating" then changes to "Connected" when successful.
+> **Peering state**: Initial status shows "Updating" then changes to "Connected" when successful.
 
 ---
 
@@ -65,7 +65,6 @@ By the end of this module, you will have:
    - **Virtual network**: `vnet-spoke2`
    - **Allow 'vnet-spoke2' to access 'vnet-hub'**: `Allow (default)`
    - **Allow 'vnet-spoke2' to receive forwarded traffic from 'vnet-hub'**: `Allow (default)`
-   - **Virtual network gateway or Route Server**: `None (default)`
 
    ![spoke2-to-hub.screenshot](images/2.2.3spoke2-to-hub.png)
 
@@ -78,7 +77,7 @@ By the end of this module, you will have:
 5. Click **"Add"**
 
 > [!NOTE]
-> **Peering Status**: Initial status shows "Updating" then changes to "Connected" when successful.
+> **Peering state**: Initial status shows "Updating" then changes to "Connected" when successful.
 
 ![peers-connected.screenshot](images/peers-connected.png)
 
