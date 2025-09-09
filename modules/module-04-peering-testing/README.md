@@ -206,8 +206,8 @@ After completing this module, your network topology should look like this:
 
 ## Next Steps
 
-Once you've completed this module and verified connectivity, you're ready to proceed to [**Module 5 - FortiGate HA Deployment: Deploy FortiGate Firewalls in Active-Passive HA with Load Balancers**](/modules/module-05-fortigate-ha-deployment/README.md).
+Once you've completed this module and verified connectivity, you're ready to proceed to [**Module 5 - Simulated On-Premises Environment: Setting Up Your On-Premise Environment**](/modules/module-05-on-prem-environment/README.md).
 
-In Module 5, we'll deploy the FortiGate firewalls that will become the central security hub for all network traffic.
+In Module 5, we'll creates a simulated on-premises environment with FortiGate, Windows VM, and basic networking.
 
 **Estimated completion time**: 15-20 minutes
