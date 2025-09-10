@@ -392,8 +392,6 @@ This bootcamp provided hands-on experience with enterprise-grade security infras
 
 **Estimated completion time**: 40-45 minutes
 
-
-
 ---
 
 ## Final Architecture Summary
