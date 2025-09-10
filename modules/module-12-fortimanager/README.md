@@ -3,10 +3,13 @@
 ## Centralized Security Management and Policy Orchestration
 
 ### Overview
+
 FortiManager provides centralized management, configuration, and policy orchestration for all FortiGate devices in your security fabric. In this final module, we'll deploy FortiManager in the Azure hub network and configure it to manage both the Azure FortiGate cluster and the on-premises FortiGate, completing our comprehensive Fortinet Security Fabric.
 
 ### Learning Objectives
+
 By the end of this module, you will have:
+
 - Deployed FortiManager VM in the Azure hub network
 - Configured centralized management for all FortiGate devices
 - Created and deployed unified security policies across the fabric
@@ -18,6 +21,7 @@ By the end of this module, you will have:
 ## Understanding FortiManager Architecture
 
 ### Management Overview
+
 ```mermaid
 graph TB
     subgraph "Azure Hub (10.16.0.0/16)"
@@ -64,6 +68,7 @@ graph TB
 ```
 
 **FortiManager Capabilities:**
+
 - **Centralized Policy Management**: Create and deploy policies across all devices
 - **Configuration Templates**: Standardize configurations across the fabric
 - **Device Provisioning**: Automated device onboarding and setup
@@ -82,6 +87,7 @@ graph TB
 4. Select **"FortiManager Centralized Security Management"** by Fortinet
 5. Click **"Create"**
 6. Select **"Fortinet FortiManager - Single VM"**
+   ![create-fortimanager.animation](images/1.1-create-fortimanager.gif)
 
 ### 1.2 Configure Basic Settings
 
@@ -91,18 +97,27 @@ graph TB
    - **Region**: `Canada Central`
    - **FortiManager administrative username**: `fortinetuser`
    - **FortiManager password**: Choose a strong password
-   - **FortiManager Name Prefix**: AZURE
+   - **FortiManager Name Prefix**: `hub`
    - **FortiManager Image SKU**: `Bring Tour Own License or FortiFlex`
    - **FortiManager Image Version**: `7.6.3`
+
+   ![basic-settings.screenshot](images/1.2-basic-settings.png)
+
+2. Click **"Next"**
 
 ### 1.2 Configure Instance Settings
 
 1. **Instance**
    - **Instance Type**: `Standard_D4s_v5` (4 vCPUs, 16 GB RAM)
    - **Availability Option**: `No infrastructure redundancy required`
+
+   ![instance-type-disk.screenshot](images/1.2a-disk.png)
+
    - **My organisation is using the FortiFlex subscription service.**: `Enable`
-   - **FortiManager FortiFlex**: Use the token provided by the instructor
-   - **Name of the FortiManager VM**: `AZURE-FMG`
+   - **FortiManager FortiFlex**: Do not use any, we will load it later.
+   - **Name of the FortiManager VM**: `hub-fmg`
+
+   ![license-configuration.screenshot](images/1.2b-license.png)
 
 ### 1.3 Configure Networking
 
@@ -110,10 +125,14 @@ graph TB
    - **Virtual network**: `vnet-hub`
    - **Subnet**: `protected (10.16.6.0/24)`
 
+   ![networking-configuration.screenshot](images/1.3-networking.png)
+
 ### 1.4 Configure Public IP
 
 1. **Public IP** configuration:
    - **Public IP**: `None` (access via Bastion)
+
+   ![public-ip-configuration.screenshot](images/1.4-public-ip.png)
 
 ### 1.5 Deploy
 
@@ -121,293 +140,190 @@ graph TB
 2. Wait for deployment to complete (~5-10 minutes)
 3. Click **"Review + create"** then **"Create"**
 
-### 1.5 Wait for Deployment
+### 1.6 Wait for Deployment
 
 FortiAnalyzer deployment typically takes 5-10 minutes.
-
----
-
-> [!NOTE]
-> Using a static IP ensures consistent management connectivity and makes device registration easier.
-
-Define a fixed ip address for FortiManager
-
-1. in the rg-hub-bootcamp
-2. go to AZURE-FMG-nic1 
-3. settings > IP configurations
-4. ipconfig1
-   - Edit IP Configuration
-   - Private IP address `10.16.6.20`
-   - Save
-
 
 ---
 
 ## Step 2: Initial FortiManager Configuration
 
 ### 2.1 Load the license
+
 1. Connect to **`vm-hub-jumpbox`** via Bastion
-2. Open a command prompt
-3. Open an SSH session to the FortiManager
+2. Open Command Prompt
+3. Open a SSH session with FortiManager
+
    ```bash
-   ssh fortinetuser@10.16.6.6
+   ssh fortinetuser@10.16.6.5
    ```
+
 4. Run the command to load the FortiFlex license using the token gave to you by the instructor
+
    ```bash
-   execute vm-license < FortiFlex token>
+   exec vm-license < FortiFlex token>
    ```
+
 5. The FortiManager will reboot
 6. Close the command prompt
 
+![fortiflex-license.screenshot](images/2.1-fortiflex-license.png)
 
+### 2.2 Access FortiManager
 
-### 2.1 Access FortiManager
 1. Connect to **`vm-hub-jumpbox`** via Bastion
 2. Open web browser
-3. Navigate to: `https://10.16.6.20`
+3. Navigate to: `https://10.16.6.5`
 4. Accept security certificate warnings
 
+### 2.3 Initial Setup
 
-### 2.2 Initial Setup
-1. **License Agreement**: Accept the license terms
-Include initial screens
+1. **FortiManager Initial setup**
 
-### 2.3 Basic System Configuration
+![initial-setup.animation](images/2.2-basic-configuration.gif)
+
+### 2.4 Basic System Configuration
+
 1. **System Settings > Settings**:
-   - **Timezone**: Select your timezone
-   - **Idle timeout (GUI)**: `28800` Seconds
+   - **Idle timeout (GUI)**: `3600` Seconds (1 hour)
+   - **Theme**: `Graphite`
+
+   ![system-configuration](images/2.3-sys-config.png)
 
 ---
 
 ## Step 3: Add FortiGate Devices to FortiManager
 
+### 3.1 Adding VM devices
 
+By default, FortiManager does not recognize VM serial numbers. This applies to:
 
-1. Go to **Security Fabric > Fabric Connectors**, then click on Central Management Settings
-2. , Edit
-12- Click on Status: “Enabled”, then enter the following information. Click on “ok” to apply the changes:
-- Type: `On-premises`
-- Mode: `Normal`
-- Server: `10.16.6.6`
-- Upload option: “Real Time”
+- FortiGate-VM
+- FortiCarrier-VM
+- FortiProxy-VM
+- FortiFirewall-VM
 
+This measure increases security of the FortiManager system by ensuring that VM devices can only be added to FortiManager when recognition of VM serial numbers has been enabled by an administrator.
 
+If you attempt to add a VM device (for example FortiGate-VM) to FortiManager while the `fgfm-allow-vm` command is disabled, an error will appear indicating that **VM devices are not allowed** or that the **device is an unsupported model**.
 
+When upgrading from an earlier version of FortiManager that does not enforce this behavior, VM devices already managed by FortiManager will continue to be supported without interruption, but you must enable the `fgfm-allow-vm` command before you can add any additional VM devices.
 
-config system global
+1. To add a FortiGate-VM to FortiManager: In the FortiManager CLI, enable recognition of FortiGate-VM serial numbers:
 
-   set fgfm-allow-vm enable
-
-end
-
-
-
-
-
-
-### 3.1 Configure Azure FortiGate A for Management
-1. Access Azure FortiGate A management interface
-2. Navigate to **System** → **FortiManager**
-3. Configure:
-   - **Central Management**: `Enable`
-   - **Server IP/FQDN**: `10.16.6.20`
-   - **Shared Secret**: `BootcampSecretKey2024`
-4. Click **"Apply"**
-
-### 3.2 Configure Azure FortiGate B for Management
-1. Access Azure FortiGate B management interface
-2. Navigate to **System** → **FortiManager**
-3. Configure identical settings:
-   - **Central Management**: `Enable`
-   - **Server IP/FQDN**: `10.16.6.20`
-   - **Shared Secret**: `BootcampSecretKey2024`
-4. Click **"Apply"**
-
-### 3.3 Configure On-Premises FortiGate for Management
-1. Access on-premises FortiGate interface
-2. Navigate to **System** → **FortiManager**
-3. Configure:
-   - **Central Management**: `Enable`
-   - **Server IP/FQDN**: `10.16.6.20` (via VPN tunnel)
-   - **Shared Secret**: `BootcampSecretKey2024`
-4. Click **"Apply"**
-
----
-
-## Step 4: Register Devices in FortiManager
-
-### 4.1 Accept Device Registrations
-1. In FortiManager, navigate to **Device Manager** → **Device & Groups**
-2. You should see pending device registrations
-3. For each device (Azure-FGT-A, Azure-FGT-B, OnPrem-FGT):
-   - Right-click the device
-   - Select **"Authorize"**
-   - Verify the device details
-   - Click **"OK"**
-
-### 4.2 Organize Devices into Groups
-1. In **Device & Groups**, create device groups:
-   - **Azure-Hub-Cluster**: Add Azure FortiGate A and B
-   - **On-Premises**: Add on-premises FortiGate
-2. Right-click in the device tree → **"Add Group"**
-3. Configure group names and add appropriate devices
-
-### 4.3 Import Device Configurations
-1. For each device, right-click → **"Import Policy Package"**
-2. This imports existing configurations into FortiManager
-3. Review imported policies under **Policy & Objects**
-
----
-
-## Step 5: Create Unified Security Policies
-
-### 5.1 Create Global Policy Package
-1. Navigate to **Policy & Objects** → **Policy Packages**
-2. Create new package:
-   - **Name**: `Global-Security-Policies`
-   - **Type**: `Policy Package`
-   - **Description**: `Unified policies for entire security fabric`
-
-### 5.2 Create Standard Security Policies
-1. In the Global policy package, create policies:
-
-**Internet Access Policy:**
-- **Name**: `Standard-Internet-Access`
-- **Source Interface**: `internal`
-- **Destination Interface**: `external`
-- **Source**: `all-internal-subnets`
-- **Destination**: `all`
-- **Service**: `HTTP, HTTPS, DNS, PING`
-- **Action**: `Accept`
-- **Security Profiles**: `Enable AV, IPS, Web Filter`
-
-**Inter-Site Communication Policy:**
-- **Name**: `Cross-Site-Access`
-- **Source Interface**: `internal/VPN`
-- **Destination Interface**: `VPN/internal`
-- **Source**: `all-sites`
-- **Destination**: `all-sites`
-- **Service**: `ALL`
-- **Action**: `Accept`
-
-### 5.3 Create Address Objects and Groups
-1. Navigate to **Policy & Objects** → **Addresses**
-2. Create standard address objects:
-   - **Azure-Hub-Subnets**: `10.16.0.0/16`
-   - **Azure-Spoke1**: `192.168.1.0/24`
-   - **Azure-Spoke2**: `192.168.2.0/24`
-   - **OnPrem-Network**: `172.16.0.0/16`
-3. Create address groups for easier policy management
-
----
-
-## Step 6: Deploy Policies to Devices
-
-### 6.1 Assign Policy Package to Devices
-1. Navigate to **Device Manager** → **Device & Groups**
-2. For each device/group:
-   - Right-click → **"Assign Policy Package"**
-   - Select **`Global-Security-Policies`**
-   - Configure installation settings
-
-### 6.2 Install Policies
-1. Navigate to **Device Manager** → **Installation Wizard**
-2. Select devices to update
-3. **Installation Options**:
-   - **Retrieve device configurations**: `Enable`
-   - **Generate configuration script**: `Enable`
-   - **Preview changes**: `Enable`
-4. Click **"Next"** and review changes
-5. Click **"Install"** to deploy policies
-
-### 6.3 Monitor Installation Status
-1. Monitor installation progress in **Task Monitor**
-2. Verify successful installation on all devices
-3. Check for any installation errors or warnings
-
----
-
-## Step 7: Configuration Templates and Automation
-
-### 7.1 Create Configuration Templates
-1. Navigate to **Device Manager** → **Provisioning Templates**
-2. Create template for standard FortiGate setup:
-   - **Name**: `Standard-FortiGate-Template`
-   - **Device Type**: `FortiGate`
-3. Configure standard settings:
-   - **Logging configuration**
-   - **NTP settings**
-   - **DNS settings**
-   - **SNMP configuration**
-
-### 7.2 Create CLI Templates
-1. Navigate to **Device Manager** → **CLI Templates**
-2. Create template for common configurations:
-   ```bash
-   config system global
-       set timezone "America/Edmonton"
-       set admin-timeout 60
-   end
-   
-   config log syslogd setting
-       set status enable
-       set server "10.16.6.10"
-       set port 514
+   ```console
+   config sys global
+       set fgfm-allow-vm enable
    end
    ```
 
-### 7.3 Apply Templates to Devices
-1. Select target devices
-2. Apply appropriate templates
-3. Schedule template deployment during maintenance windows
+   ![enable-vm.screenshot](images/3.1-enable-vm.png)
+
+### 3.2 Add the FortiGate on-premise
+
+1. Go to **Security Fabric > Fabric Connectors**, then click on Central Management Settings
+
+   ![fabric-connectors](images/3.2.1-fabric-connectors.png)
+
+2. Click **Edit**
+   - **Status**: `Enabled`
+   - **Type**: `On-Premises`
+   - **Mode**: `Normal`
+   - **IP/Domain name**: `10.16.6.6`
+
+   ![central-management-settings.screenshot](images/3.2.2-central-mgmt-settings.png)
+
+3. Accept the FortiManager serial number and certificate
+
+   ![accept-serial-number-certificate.screenshot](images/3.2.3-serial-certificate.png)
+
+4. Request sent and received: now the FortiGate needs to be authorized in the FortiManager.
+
+   ![request-sent-received.screenshot](images/3.2.4-request.png)
+
+>[!NOTE] Because the Security Fabric is configured, once you add the FortiGate on-premise (root) to FortiManager, the FortiGate on Azure is automatically added as well.
+
+### 3.3 Authorize Devices in FortiManager
+
+1. From the jumpbox, open Microsoft Edge
+2. Navigate to: `https://10.16.6.5`
+3. Navigate to **Device Manager** > **Device & Groups**
+4. Click **"Unauthorized Devices"**
+5. Select the all FortiGate devices
+6. Click **"Authorize"**
+
+   ![authorization-fmg.screenshot](images/3.3-authorization-fmg.png)
+
+7. Click **"Ok"** in the **"Authorize Device"** window
+
+   ![authorized-device.screenshot](images/3.3-authorized-device.png)
+
+### 3.4 Verify Connection Status
+
+1. Wait a few minutes for connection establishment
+2. Refresh the FortiManager page
+3. Verify connection status shows as connected
+
+   ![fabric-connected-fmg.screenshot](images/3.4-fabric-connected-fmg.png)
+
+4. Return to the FortiGate and check **Security Fabric** → **Fabric Connectors** for connection status
+
+### 3.5 Verify FortiGate on-prem for Management
+
+1. Access FortiGate on-prem management interface
+2. You should see a message informing that this FortiGate is managed by FortiManager.
+
+   ![managed-by-fmg.screenshot](images/3.5-fmg-managed-alert.png)
+
+3. Click **Login Read-Only**
+4. Navigate to **Security Fabric** → **Fabric Connectors**
+
+   ![fabric-connector-fgt-on-prem.screenshot](images/3.5-fgt-on-prem.png)
+
+### 3.6 Verify Hub FortiGate A for Management
+
+1. Access hub FortiGate A management interface
+2. Login with your `fortinetuser` username and your password
+
+   ![fortigate-login.screenshot](images/3.6-fgt-login.png)
+
+3. You should see a message informing that this FortiGate is managed by FortiManager.
+
+   ![fmg-managed-fgt-alert.screenshot](images/3.6-fmg-managed-alert.png)
+
+4. Navigate to **Security Fabric** → **Fabric Connectors**
+
+   ![fabric-connector-fgt-a.screenshot](images/3.6-fgt-hub-A.png)
+
+### 3.7 Verify Hub FortiGate B for Management
+
+1. Access hub FortiGate B management interface
+2. The login process is similar to Fortigate A
+3. Navigate to **Security Fabric** → **Fabric Connectors**
+
+   ![fabric-connector-fgt-b.screenshot](images/3.7-fgt-hub-B.png)
 
 ---
 
-## Step 8: Monitoring and Maintenance
+## Step 4: Manage Devices in FortiManager
 
-### 8.1 Device Status Monitoring
-1. Navigate to **System Settings** → **Dashboard**
-2. Configure dashboard widgets:
-   - **Device Status Overview**
-   - **Policy Installation Status**
-   - **Configuration Compliance**
-   - **System Resources**
+### 4.1 Import Device Configurations
 
-### 8.2 Configuration Backup and Restore
-1. Navigate to **Device Manager** → **Backup & Restore**
-2. Configure automatic backups:
-   - **Schedule**: Daily at 2:00 AM
-   - **Retention**: 30 days
-   - **Location**: Local FortiManager storage
+1. For each device, right-click → **"Import Configuration"**
 
-### 8.3 Firmware Management
-1. Navigate to **Device Manager** → **Firmware Images**
-2. Upload FortiGate firmware images
-3. Schedule firmware updates:
-   - **Maintenance Window**: Planned downtime
-   - **Rollback Plan**: Automatic if health checks fail
+   ![import-configuration.screeenshot](images/4.1.1-import-config.png)
 
----
+2. This imports existing configurations into FortiManager
 
-## Step 9: Security Fabric Integration
+   - For the importing, let's use all default options
+   ![select-import-type.screenshot](images/4.1-1of5-import-policy-package.png)
+   ![interface-mapping-n-policy.screnshot](images/4.1-2of5-mpot-policy-pkg.png)
+   ![ready.screenshot](images/4.1-4of5-ready-to-impot.png)
+   ![importing](images/4.1-5of5-importing.png)
 
-### 9.1 Configure Security Fabric
-1. Navigate to **Security Fabric** → **Fabric Connectors**
-2. Add FortiAnalyzer connector:
-   - **Connector Type**: `FortiAnalyzer`
-   - **IP Address**: `10.16.6.10`
-   - **Admin User**: `admin`
-   - **Password**: `Chicken12345!`
+3. Review imported policies under **Policy & Objects** > **Policy Packages**
 
-### 9.2 Fabric-Wide Policy Deployment
-1. Create fabric-wide security policies
-2. Deploy consistent security posture across all devices
-3. Monitor compliance through fabric dashboard
-
-### 9.3 Centralized Threat Intelligence
-1. Configure threat feed subscriptions
-2. Deploy threat indicators across the fabric
-3. Monitor threat detection and response
+   ![alt text](images/4.1.3-policy-packages.png)
 
 ---
 
@@ -416,29 +332,16 @@ end
 Before completing the bootcamp, verify you have accomplished:
 
 **FortiManager Deployment:**
-- [ ] Deployed FortiManager VM with static IP 10.16.6.20
+
+- [ ] Deployed FortiManager VM
 - [ ] Completed initial setup and admin password configuration
 - [ ] Configured timezone and system settings
 
 **Device Management:**
+
 - [ ] Registered all three FortiGates with FortiManager
 - [ ] Organized devices into logical groups
 - [ ] Imported existing device configurations
-
-**Policy Management:**
-- [ ] Created global policy package with standard security policies
-- [ ] Deployed unified policies to all devices
-- [ ] Verified successful policy installation
-
-**Automation and Templates:**
-- [ ] Created configuration templates for standard settings
-- [ ] Set up automated backup schedules
-- [ ] Configured firmware management processes
-
-**Security Fabric:**
-- [ ] Integrated FortiAnalyzer with FortiManager
-- [ ] Established fabric-wide security visibility
-- [ ] Verified centralized management and monitoring capabilities
 
 ---
 
@@ -446,73 +349,10 @@ Before completing the bootcamp, verify you have accomplished:
 
 After completing all modules, your comprehensive Fortinet Security Fabric should look like this:
 
-```mermaid
-graph TB
-    subgraph "Management Layer"
-        FMG[FortiManager<br/>10.16.6.20<br/>Central Management]
-        FAZ[FortiAnalyzer<br/>10.16.6.10<br/>Central Logging]
-    end
-    
-    subgraph "Azure Hub Security Layer"
-        FGTA[FortiGate A<br/>Active]
-        FGTB[FortiGate B<br/>Passive]
-        ELB[External LB]
-        ILB[Internal LB]
-    end
-    
-    subgraph "On-Premises Security"
-        ONPREMFGT[on-prem-FGT<br/>172.16.3.4]
-    end
-    
-    subgraph "Azure Workloads"
-        HUBVM[Hub Jumpbox]
-        SPOKE1[Spoke1 VMs<br/>192.168.1.0/24]
-        SPOKE2[Spoke2 VMs<br/>192.168.2.0/24]
-    end
-    
-    subgraph "On-Premises Workloads"
-        ONPREMVM[Windows Workstation<br/>172.16.4.4]
-    end
-    
-    subgraph "Internet"
-        WEB((Internet))
-    end
-    
-    %% Management connections
-    FMG -->|Policy Deploy| FGTA
-    FMG -->|Policy Deploy| FGTB
-    FMG -.->|Policy Deploy via VPN| ONPREMFGT
-    
-    %% Logging connections
-    FGTA -->|Logs| FAZ
-    FGTB -->|Logs| FAZ
-    ONPREMFGT -.->|Logs via VPN| FAZ
-    
-    %% Security inspection flows
-    WEB --> ELB
-    ELB --> FGTA
-    ELB --> FGTB
-    FGTA --> ILB
-    FGTB --> ILB
-    ILB --> SPOKE1
-    ILB --> SPOKE2
-    ILB --> HUBVM
-    
-    %% VPN connectivity
-    ONPREMFGT <-.->|IPSec VPN| FGTA
-    ONPREMFGT <-.->|IPSec VPN| FGTB
-    ONPREMFGT --- ONPREMVM
-    
-    style FMG fill:#2196F3
-    style FAZ fill:#4CAF50
-    style FGTA fill:#ff6b6b
-    style FGTB fill:#ff6b6b
-    style ONPREMFGT fill:#ff6b6b
-    style ELB fill:#4ecdc4
-    style ILB fill:#45b7d1
-```
+![reference-architecture](../../images/reference-architecture.png)
 
 **Complete Security Fabric Features:**
+
 - **Centralized Management**: All policies deployed from FortiManager
 - **Unified Logging**: All traffic and events logged to FortiAnalyzer
 - **High Availability**: Azure FortiGate cluster with automatic failover
@@ -522,12 +362,13 @@ graph TB
 
 ---
 
-## Congratulations!
+## Congratulations
 
-You have successfully completed the **Fortinet Security Fabric Azure Bootcamp**! 
+You have successfully completed the **Fortinet Security Fabric Azure Bootcamp**!
 
-### What You've Accomplished:
-1. **Built a comprehensive hybrid security architecture** spanning on-premises and Azure environments
+### What You've Accomplished
+
+1. **Built a comprehensive hybrid security architecture** spanning on-premises (simulated) and Azure environments
 2. **Deployed high-availability FortiGate clusters** with proper load balancing and failover
 3. **Implemented centralized logging and analytics** with FortiAnalyzer
 4. **Established centralized management and policy orchestration** with FortiManager
@@ -535,14 +376,16 @@ You have successfully completed the **Fortinet Security Fabric Azure Bootcamp**!
 6. **Configured advanced networking** with hub-spoke topology and user-defined routes
 7. **Applied zero-trust security principles** with comprehensive traffic inspection
 
-### Next Steps for Production:
+### Next Steps (if you are brave enough!)
+
 - **Security Profiles**: Configure IPS, AV, Web Filtering, and Application Control
 - **High Availability Testing**: Validate failover scenarios and recovery procedures
 - **Performance Optimization**: Tune FortiGate sizing and accelerated networking
 - **Compliance Reporting**: Set up automated compliance and audit reports
 - **Disaster Recovery**: Implement backup and recovery procedures for all components
 
-### Thank You!
+### Thank You
+
 This bootcamp provided hands-on experience with enterprise-grade security infrastructure. The skills and architecture patterns you've learned are directly applicable to real-world deployments.
 
 **Estimated completion time**: 40-45 minutes
@@ -552,6 +395,7 @@ This bootcamp provided hands-on experience with enterprise-grade security infras
 ## Final Architecture Summary
 
 Your completed environment includes:
+
 - **3 Resource Groups**: Hub, Spoke1, Spoke2, On-Premises
 - **6+ Virtual Networks**: Hub, 2 Spokes, On-Premises with proper peering
 - **5 FortiGate Instances**: 2 Azure HA cluster + 1 on-premises
