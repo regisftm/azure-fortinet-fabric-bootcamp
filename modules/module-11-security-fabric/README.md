@@ -303,23 +303,19 @@ graph TB
 
 ### Step 8: Test Fabric Functionality
 
-#### 8.1 Centralized Device Management
+#### 8.1 Shared Threat Intelligence
 
-1. From the root FortiGate, navigate to **Security Fabric** → **Fabric Management**
-2. View all connected devices in unified interface
-3. Test remote device configuration access
-
-#### 8.2 Shared Threat Intelligence
-
-1. Navigate to **Security Fabric** → **Security Rating**
+1. Navigate to **Security Fabric** → **Security Rating** in the on-prem Fortigate
 2. View fabric-wide security posture
 3. Check threat intelligence synchronization
 
+![security-rating.screenshot](images/8.1-security-rating.png)
+
 #### 8.3 Unified Log Correlation
 
-1. Generate traffic across multiple devices
-2. Navigate to **Log & Report** → **Fabric View**
-3. Observe correlated events across the fabric
+1. Connect to **FortiAnalyzer**
+2. Navigate to **Fabric View** → **Asset Identity Center**
+3. Explore the widgets in the **Summary** tab
 
 ---
 
@@ -339,7 +335,7 @@ graph TB
 
 ### 9.3 Centralized Firmware Management
 
-1. Navigate to **Security Fabric** → **Fabric Management**
+1. Navigate to **Security Fabric** → **Physical Topology**
 2. View firmware versions across all devices
 3. Plan coordinated firmware updates
 
@@ -351,7 +347,7 @@ Before proceeding to Module 12, verify you have completed:
 
 **VPN Interface Configuration:**
 
-- [ ] Configured VPN tunnel interface IPs (10.100.101.1/30 and 10.100.101.2/30)
+- [ ] Configured VPN tunnel interface IPs (10.100.101.1 and 10.100.101.2)
 - [ ] Updated VPN address objects and groups
 - [ ] Modified Phase2 selectors to allow all traffic
 - [ ] Verified VPN tunnel connectivity
@@ -413,7 +409,7 @@ Before proceeding to Module 12, verify you have completed:
 
 ## Next Steps
 
-Once you've completed this module and verified Security Fabric connectivity, you're ready to proceed to **Module 12: FortiManager Deployment**.
+Once you've completed this module and verified Security Fabric connectivity, you're ready to proceed to [**Module 12 - FortiManager Deployment: Centralized Security Management and Policy Orchestration**](/modules/module-12-fortimanager/README.md)
 
 FortiManager will integrate with the Security Fabric to provide enhanced centralized management, policy templates, and automated deployment capabilities.
 
