@@ -150,7 +150,7 @@ graph TB
    - Add **`fabric_connection`** to members
    - Click **"OK"**
 
-![vpn-address-group-update.screenshot](images/3.2-address-grp-update.gif)
+![vpn-address-group-update.animation](images/3.2-address-grp-update.gif)
 
 #### 3.3 Update Phase2 Configuration
 
@@ -161,7 +161,7 @@ graph TB
    - **Remote Address**: `all`
 4. Click **"OK"**
 
-![upgrade-phase2-tunnel.screenchot](3.3-upgrade-phase2.gif)
+![upgrade-phase2-tunnel.animation](images/3.3-upgrade-phase2.gif)
 
 ---
 
@@ -173,15 +173,7 @@ graph TB
 2. Update the **`to_on_prem`** tunnel Phase2 selectors to `all`
 3. Verify VPN tunnel status shows **"Up"**
 
-#### 4.2 Test VPN Tunnel Connectivity
-
-From on-premises FortiGate CLI:
-
-```bash
-execute ping 10.100.101.2
-```
-
-**Expected Result**: Successful ping response
+![ipsec-vpn-status.screenshot](images/4.1-vpn-status.png)
 
 ---
 
@@ -194,16 +186,24 @@ execute ping 10.100.101.2
 1. In on-premises FortiGate, navigate to **Security Fabric** → **Fabric Connectors**
 2. Click **"Edit"**
 
+![access-fabric-configuration.screenshot](images/5.1-fabric-config.png)
+
 #### 5.2 Configure Root Settings
 
 1. **Security Fabric Configuration**:
    - **Security Fabric Role**: `Serve as Fabric Root`
    - **Allow other Security Fabric devices to join**: `Enable`
+     - `port2`
+     - `to_azure_hub`
    - **Fabric Name**: `BootcampFabric`
    - **FortiCloud account enforcement**: `Disable` (for lab)
    - **Allow downstream device REST API access**: `Enable`
    - **Administrator profile**: `super_admin`
    - **Fabric global object**: `Enable`
+   - **Management IP/FQDN**: `Use WAN IP`
+   - **Management port**: `User Admin Port`
+
+![root-settings-config](images/5.2-root-settings-config.png)
 
 #### 5.3 Configure SAML SSO
 
@@ -215,6 +215,8 @@ execute ping 10.100.101.2
    - **Management IP/FQDN**: `172.16.3.4`
    - **Management Port**: `Use Admin Port`
 
+![saml-configuration.screenshot](images/5.3-saml-config.png)
+
 #### 5.4 Configure Device Authorization
 
 1. In **Device authorization** section, click **"Edit"**
@@ -222,15 +224,19 @@ execute ping 10.100.101.2
 
    **Device 1 (FortiGate A):**
 
-   - **Device Name**: `hub-fgt-a`
+   - **Device Name**: `hub-FGT-A`
    - **Serial Number**: `[Get from Azure FortiGate A Dashboard → Status]`
+
+   !device-autorization-fgt-a](images/5.4-device-authorization.gif)
 
    **Device 2 (FortiGate B):**
 
-   - **Device Name**: `hub-fgt-b`
+   - **Device Name**: `hub-FGT-B`
    - **Serial Number**: `[Get from Azure FortiGate B Dashboard → Status]`
 
 3. Click **"OK"** to save configuration
+
+![device-authorization](images/5.4-device-authorization.gif)
 
 > [!TIP]
 > **Finding Serial Numbers**: Navigate to each FortiGate's **Dashboard** → **Status** and look under **System Information** for the serial number.
@@ -251,26 +257,16 @@ execute ping 10.100.101.2
    - **Allow other Security Fabric devices to join**: `Disable`
    - **Upstream FortiGate IP/FQDN**: `10.100.101.1`
    - **Allow downstream device REST API access**: `Disable`
-
-#### 6.3 Configure SAML SSO
-
-1. **SAML Single Sign-On**:
-   - **SAML Single Sign-On**: `Auto`
-   - **Mode**: `Service Provider (SP)`
-   - **Default login page**: `Normal`
-   - **Default admin profile**: `super_admin`
    - **Management IP/FQDN**: `Specify: 10.16.3.5`
    - **Management Port**: `Use Admin Port`
+2. **SAML Single Sign-On**:
+   - **SAML Single Sign-On**: `Auto`
+   - **Default login page**: `Normal`
+   - **Default admin profile**: `super_admin`
 
-2. Click **"OK"** to save configuration
+   ![fabric-connector-leaf](images/6.3-security-fabric-configuration.png)
 
-#### 6.4 Configure FortiGate B (If Not in HA)
-
-If FortiGate B is configured separately:
-
-1. Repeat the same configuration on FortiGate B
-2. Use **Management IP/FQDN**: `10.16.3.6`
-3. Ensure same upstream FortiGate IP: `10.100.101.1`
+3. Click **"OK"** to save configuration
 
 ---
 
@@ -282,8 +278,10 @@ If FortiGate B is configured separately:
 
 1. In on-premises FortiGate, navigate to **Security Fabric** → **Physical Topology**
 2. Verify connected devices show:
-   - **Root**: on-prem-FGT (connected)
-   - **Leaves**: hub-fgt-a, hub-fgt-b (connected)
+   - **Root**: on-prem-fgt (connected)
+   - **Leaves**: HA: Active-Passive [hub-FTG-A, hub-FGT-B] (connected)
+
+![physical-topology-root.screenshot](images/7.1-fabric-topology.png)
 
 #### 7.2 Check Fabric Status on Leaf
 
@@ -291,11 +289,15 @@ If FortiGate B is configured separately:
 2. Verify fabric connection shows as **"Connected"**
 3. Check that root device is visible
 
+![physical-topology-leaf.screenshot](images/7.2-physical-topo-leaf.png)
+
 #### 7.3 Verify Logical Topology
 
 1. Navigate to **Security Fabric** → **Logical Topology**
 2. View the unified security architecture
 3. Observe threat intelligence sharing indicators
+
+![logical-topology-leaf.screenshot](images/7.3-logical-topo-leaf.png)
 
 ---
 
