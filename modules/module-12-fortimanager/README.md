@@ -384,11 +384,15 @@ You have successfully completed the **Fortinet Security Fabric Azure Bootcamp**!
 - **Compliance Reporting**: Set up automated compliance and audit reports
 - **Disaster Recovery**: Implement backup and recovery procedures for all components
 
+Or you can clean up all the resources used in this bootcamp by following the steps in [**Module 13 - Environment Cleanup: Removing All Bootcamp Resources**](/modules/module-13-cleanup/README.md)
+
 ### Thank You
 
 This bootcamp provided hands-on experience with enterprise-grade security infrastructure. The skills and architecture patterns you've learned are directly applicable to real-world deployments.
 
 **Estimated completion time**: 40-45 minutes
+
+
 
 ---
 
