@@ -2,7 +2,7 @@
 
 ## From Edge to Cloud: Building resilient Azure security with hybrid connectivity
 
-### Welcome!
+### Welcome
 
 Organizations need resilient security solutions that protect both cloud and on-premises assets while maintaining operational continuity. This bootcamp provides practical skills for building enterprise-ready security infrastructure that ensures high availability, centralized visibility, and seamless connectivity across hybrid environments. You'll gain hands-on experience with real-world deployment scenarios critical for modern cybersecurity professionals by building a complete security fabric featuring high-availability FortiGate clusters, with FortiManager and FortiAnalyzer, and hybrid connectivity.
 
@@ -58,8 +58,12 @@ Module 13 - [Environment Cleanup: Removing All Bootcamp Resources](/modules/modu
 > [!NOTE]
 > The workshop provides examples and sample code as instructional content for you to consume. These examples will help you understand how to configure Fortinet Security Fabric and build a functional solution. **Please note that these examples are not suitable for use in production environments**.  
 
+---
+
 > [!CAUTION]
 > If you are using an Azure subscription in your production environment, it would be more prudent not to use your "Global Admin" account. Although the lab is designed to function in "isolated" mode, a "human" error when creating certain resources such as peering and routing table could impact your production environment. **We recommend using your standard account on an isolated subscription**.
+
+---
 
 > [!WARNING]
 > This lab uses several virtual machines. The entire lab should stay under **$30**. At the end of the day, it will be important to delete everything or at least stop the VMs if you don't want any unpleasant surprises.
