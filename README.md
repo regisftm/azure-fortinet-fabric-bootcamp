@@ -15,7 +15,6 @@ The estimated time to complete this bootcamp is 5 - 6 hours.
 - Cloud security engineers and architects
 - Network security professionals transitioning to cloud
 - Fortinet administrators expanding to Azure
-- DevOps/SecOps engineers managing hybrid environments
 - IT professionals implementing enterprise security solutions
 - Security consultants and presales engineers
 - System administrators responsible for firewall management
